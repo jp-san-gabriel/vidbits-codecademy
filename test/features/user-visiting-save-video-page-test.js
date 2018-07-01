@@ -2,6 +2,16 @@ const {assert} = require('chai');
 
 describe('User visits "Save Video" page', () => {
   describe('posts a new item', () => {
+
+    it('to path "/videos"', () => {
+      // Exercise
+      browser.url('/videos/create.html');
+
+      // Verify
+      assert.equal(browser.getAttribute('body form', 'method'), 'post');
+      assert.include(browser.getAttribute('body form', 'action'), '/videos');
+    });
+
     it('and is rendered', () => {
       // Setup
       const videoToSave = {
