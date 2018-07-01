@@ -10,4 +10,16 @@ describe('User visits landing page', () => {
       assert.equal(browser.getText('#videos-container'), '');
     });
   });
+  describe('can navigate', () => {
+    it('to save video page', () => {
+      // Setup
+      browser.url('/');
+
+      //Exercise
+      browser.click('a[href="/videos/create.html"]');
+
+      // Verify
+      assert.include(browser.getText('body'), "Save a video");
+    });
+  });
 });
