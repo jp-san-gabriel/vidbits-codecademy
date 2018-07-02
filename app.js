@@ -3,6 +3,7 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const videosRoute = require('./routes/videos.js');
 
 const app = express();
 
@@ -17,9 +18,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.post('/videos', (req, res) => {
-  res.sendStatus(201);
-});
+app.use('/', videosRoute);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
