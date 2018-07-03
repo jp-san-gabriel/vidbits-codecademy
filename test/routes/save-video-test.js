@@ -2,20 +2,15 @@ const {assert} = require('chai');
 const request = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
-const {mongoose, databaseUrl, options} = require('../../database');
+const {connectDatabase, disconnectDatabase} = require('../database-utilities');
 
 describe('Server path: /videos', () => {
   // Setup Phase
-  beforeEach(async () => {
-    await mongoose.connect(databaseUrl, options);
-    await mongoose.connection.db.dropDatabase();
-  });
+  beforeEach(connectDatabase);
 
   // Teardown Phase
-  afterEach(async () => {
-    await mongoose.disconnect();
-  });
-  
+  afterEach(disconnectDatabase);
+
   describe('POST', () => {
     it('responds 201 status for new video creation', async () => {
       const response = await request(app)
