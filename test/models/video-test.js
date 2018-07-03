@@ -26,6 +26,18 @@ describe('Model: Video', () => {
     });
   });
 
+  describe('#description', () => {
+    it('is a String', () => {
+      // Setup
+      const descriptionAsNumber = 1;
+
+      //Exercise
+      const video = new Video({description: descriptionAsNumber});
+
+      // Verify
+      assert.strictEqual(video.description, descriptionAsNumber.toString());
+    });
+  });
 });
 
 module.exports = {
