@@ -2,6 +2,7 @@ const {assert} = require('chai');
 const request = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
+const {mongoose, databaseUrl, options} = require('../../database');
 
 describe('Server path: /videos', () => {
   describe('POST', () => {
@@ -14,6 +15,17 @@ describe('Server path: /videos', () => {
   });
 
   describe('POST', () => {
+    // Setup Phase
+    beforeEach(async () => {
+      await mongoose.connect(databaseUrl, options);
+      await mongoose.connection.db.dropDatabase();
+    });
+
+    // Teardown Phase
+    afterEach(async () => {
+      await mongoose.disconnect();
+    });
+
     it('saves a video', async () => {
       // Setup
       const videoToSave = {
