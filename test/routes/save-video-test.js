@@ -36,6 +36,9 @@ describe('Server path: /videos', () => {
       const savedVideo = await Video.findOne({});
       assert.equal(savedVideo.title, videoToSave.title);
       assert.equal(savedVideo.description, videoToSave.description);
+      //ensure response contains video details
+      assert.include(response.text, videoToSave.title);
+      assert.include(response.text, videoToSave.description);
     });
   });
 });
