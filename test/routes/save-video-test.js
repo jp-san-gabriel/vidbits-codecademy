@@ -5,25 +5,23 @@ const Video = require('../../models/video');
 const {mongoose, databaseUrl, options} = require('../../database');
 
 describe('Server path: /videos', () => {
+  // Setup Phase
+  beforeEach(async () => {
+    await mongoose.connect(databaseUrl, options);
+    await mongoose.connection.db.dropDatabase();
+  });
+
+  // Teardown Phase
+  afterEach(async () => {
+    await mongoose.disconnect();
+  });
+  
   describe('POST', () => {
     it('responds 201 status for new video creation', async () => {
       const response = await request(app)
         .post('/videos')
         .type('form')
       assert.equal(response.status, 201);
-    });
-  });
-
-  describe('POST', () => {
-    // Setup Phase
-    beforeEach(async () => {
-      await mongoose.connect(databaseUrl, options);
-      await mongoose.connection.db.dropDatabase();
-    });
-
-    // Teardown Phase
-    afterEach(async () => {
-      await mongoose.disconnect();
     });
 
     it('saves a video', async () => {
