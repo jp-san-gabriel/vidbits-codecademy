@@ -1,4 +1,11 @@
 <div class="contents-container" id="videos-container">
+  {{#each videos as |video|}}
+  <div class="video-card">
+    <div class="video-title">
+      {{video.title}}
+    </div>
+  </div>
+  {{/each}}
 </div>
 
 <a href="/videos/create.html">
