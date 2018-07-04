@@ -11,6 +11,22 @@ describe('Server path: /videos', () => {
   // Teardown Phase
   afterEach(disconnectDatabase);
 
+  describe('GET', () => {
+    it('renders existing videos', async () => {
+      // Setup
+      const existingVideo = await Video.create({
+        title: 'Shampoo Prank 890111',
+        description: 'Cold Water Edition'
+      });
+
+      //Exercise
+      const response = await request(app).get('/videos');
+
+      // Verify
+      assert.include(response.text, existingVideo.title);
+    });
+  });
+
   describe('POST', () => {
     it('responds 201 status for new video creation', async () => {
       const response = await request(app)
