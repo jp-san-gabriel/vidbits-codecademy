@@ -3,6 +3,7 @@ const request = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
 const {connectDatabase, disconnectDatabase} = require('../database-utilities');
+const {jsdom} = require('jsdom');
 
 describe('Server path: /videos', () => {
   // Setup Phase
@@ -96,6 +97,23 @@ describe('Server path: /videos', () => {
 
       //Verify
       assert.equal(response.status, 400);
+    });
+
+    it('renders video form when title is empty', async () => {
+      // setup
+      const videoToSave = {
+        title: ''
+      };
+
+      // Exercise
+      const response = await request(app)
+        .post('/videos')
+        .type('form')
+        .send(videoToSave);
+
+      // Verify
+      assert.exists(jsdom(response.text).querySelector('form input[name="title"]'),
+        'could not find input with name "title"');
     });
   });
 });
