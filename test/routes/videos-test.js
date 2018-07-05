@@ -82,5 +82,20 @@ describe('Server path: /videos', () => {
       const videos = await Video.find({});
       assert.isEmpty(videos);
     });
+
+    it('does not accept a Video with empty title', async () => {
+      // setup
+      const videoToSave = {
+        title: ''
+      }
+      // Exercise
+      const response = await request(app)
+        .post('/videos')
+        .type('form')
+        .send(videoToSave);
+
+      //Verify
+      assert.equal(response.status, 400);
+    });
   });
 });
