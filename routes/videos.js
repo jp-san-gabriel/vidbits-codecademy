@@ -7,8 +7,12 @@ router.get('/videos/create.html', (req, res) => {
 
 router.post('/videos', async (req, res) => {
   const {title, description} = req.body;
-  const video = await Video.create({title, description});
-  res.status(201).render('videos/show', {video});
+  if(title) {
+    const video = await Video.create({title, description});
+    res.status(201).render('videos/show', {video});
+  } else {
+    res.send('');
+  }
 });
 
 router.get('/videos', async(req, res) => {
