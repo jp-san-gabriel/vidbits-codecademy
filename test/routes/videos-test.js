@@ -56,5 +56,22 @@ describe('Server path: /videos', () => {
       assert.include(response.text, videoToSave.title);
       assert.include(response.text, videoToSave.description);
     });
+
+    it('does not save a video with empty title', async() => {
+      // Setup
+      const videoToSave = {
+        title: ''
+      };
+
+      // Exercise
+      await request(app)
+        .post('/videos')
+        .type('form')
+        .send(videoToSave);
+
+      // Verify
+      const videos = await Video.find({});
+      assert.isEmpty(videos);
+    });
   });
 });
