@@ -29,9 +29,18 @@ describe('Server path: /videos', () => {
 
   describe('POST', () => {
     it('responds 201 status for new video creation', async () => {
+      // Setup
+      const videoToSave = {
+        title: 'Sample Title'
+      }
+
+      // Exercise
       const response = await request(app)
         .post('/videos')
         .type('form')
+        .send(videoToSave);
+
+      // Verify
       assert.equal(response.status, 201);
     });
 
