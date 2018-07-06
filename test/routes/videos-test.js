@@ -115,5 +115,19 @@ describe('Server path: /videos', () => {
       assert.exists(getElementFromHtml(response.text,'form input[name="title"]'),
         'could not find input with name "title"');
     });
+
+    it('displays an error message when video title is empty', async () => {
+      // setup
+      const videoToSave = { title: '' };
+
+      // Exercise'
+      const response = await request(app)
+        .post('/videos')
+        .type('form')
+        .send(videoToSave);
+
+      // Verify
+      assert.include(response.text, 'Title is required');
+    });
   });
 });
