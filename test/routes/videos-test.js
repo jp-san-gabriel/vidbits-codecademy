@@ -67,67 +67,69 @@ describe('Server path: /videos', () => {
       assert.include(response.text, videoToSave.description);
     });
 
-    it('does not save a video with empty title', async() => {
-      // Setup
-      const videoToSave = {
-        title: ''
-      };
+    describe("with empty video title", () => {
+      it('does not save the video', async() => {
+        // Setup
+        const videoToSave = {
+          title: ''
+        };
 
-      // Exercise
-      await request(app)
-        .post('/videos')
-        .type('form')
-        .send(videoToSave);
+        // Exercise
+        await request(app)
+          .post('/videos')
+          .type('form')
+          .send(videoToSave);
 
-      // Verify
-      const videos = await Video.find({});
-      assert.isEmpty(videos);
-    });
+        // Verify
+        const videos = await Video.find({});
+        assert.isEmpty(videos);
+      });
 
-    it('does not accept a Video with empty title', async () => {
-      // setup
-      const videoToSave = {
-        title: ''
-      }
-      // Exercise
-      const response = await request(app)
-        .post('/videos')
-        .type('form')
-        .send(videoToSave);
+      it('responds with a 400 status code', async () => {
+        // setup
+        const videoToSave = {
+          title: ''
+        }
+        // Exercise
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(videoToSave);
 
-      //Verify
-      assert.equal(response.status, 400);
-    });
+        //Verify
+        assert.equal(response.status, 400);
+      });
 
-    it('renders video form when title is empty', async () => {
-      // setup
-      const videoToSave = {
-        title: ''
-      };
+      it('renders the video form', async () => {
+        // setup
+        const videoToSave = {
+          title: ''
+        };
 
-      // Exercise
-      const response = await request(app)
-        .post('/videos')
-        .type('form')
-        .send(videoToSave);
+        // Exercise
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(videoToSave);
 
-      // Verify
-      assert.exists(getElementFromHtml(response.text,'form input[name="title"]'),
-        'could not find input with name "title"');
-    });
+        // Verify
+        assert.exists(getElementFromHtml(response.text,'form input[name="title"]'),
+          'could not find input with name "title"');
+      });
 
-    it('displays an error message when video title is empty', async () => {
-      // setup
-      const videoToSave = { title: '' };
+      it('displays an error message', async () => {
+        // setup
+        const videoToSave = { title: '' };
 
-      // Exercise'
-      const response = await request(app)
-        .post('/videos')
-        .type('form')
-        .send(videoToSave);
+        // Exercise'
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(videoToSave);
 
-      // Verify
-      assert.include(response.text, 'Title is required');
+        // Verify
+        assert.include(response.text, 'Title is required');
+      });
     });
   });
 });
