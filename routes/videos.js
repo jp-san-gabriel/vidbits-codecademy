@@ -7,12 +7,14 @@ router.get('/videos/create.html', (req, res) => {
 
 router.post('/videos', async (req, res) => {
   const {title, description} = req.body;
+  const video = new Video({title, description});
+
   if(title) {
-    const video = await Video.create({title, description});
+    await video.save();
     res.status(201).render('videos/show', {video});
   } else {
     const error = 'Title is required';
-    res.status(400).render('videos/create', {error});
+    res.status(400).render('videos/create', {video, error});
   }
 });
 
