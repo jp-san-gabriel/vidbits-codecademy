@@ -130,6 +130,24 @@ describe('Server path: /videos', () => {
         // Verify
         assert.include(response.text, 'Title is required');
       });
+
+      it('preserves the other field values', async () => {
+        // Setup
+        const videoToSave = {
+          title: '',
+          description: 'This is an untitled video'
+        }
+
+        // Exercise
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(videoToSave);
+
+        //Verify
+        assert.include(response.text, 'Title is required');
+        assert.include(response.text, videoToSave.description);
+      });
     });
   });
 });
