@@ -29,7 +29,7 @@ describe('Server path: /videos', () => {
   });
 
   describe('POST', () => {
-    it('responds 201 status for new video creation', async () => {
+    it('renders the new video', async () => {
       // Setup
       const videoToSave = {
         title: 'Sample Title'
@@ -42,7 +42,9 @@ describe('Server path: /videos', () => {
         .send(videoToSave);
 
       // Verify
-      assert.equal(response.status, 201);
+      const savedVideo = await Video.findOne({});
+      assert.equal(response.status, 302);
+      assert.equal(response.headers.location, `/videos/${savedVideo._id}`);
     });
 
     it('saves a video', async () => {
