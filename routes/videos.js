@@ -23,4 +23,10 @@ router.get('/videos', async(req, res) => {
   res.render('videos/index', {videos});
 });
 
+router.get('/videos/:id', async (req, res) => {
+  const videoId = req.params.id;
+  const video = await Video.findById(videoId);
+  res.render('videos/show', {video});
+});
+
 module.exports = router;
