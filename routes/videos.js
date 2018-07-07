@@ -11,7 +11,7 @@ router.post('/videos', async (req, res) => {
 
   if(title) {
     await video.save();
-    res.status(201).render('videos/show', {video});
+    res.redirect(302, `/videos/${video._id}`);
   } else {
     const error = 'Title is required';
     res.status(400).render('videos/create', {video, error});
