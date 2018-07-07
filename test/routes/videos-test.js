@@ -151,3 +151,25 @@ describe('Server path: /videos', () => {
     });
   });
 });
+
+describe("Server path: /videos/:id", () => {
+  beforeEach(connectDatabase);
+  afterEach(disconnectDatabase);
+
+  describe("GET", () => {
+    it("renders the video", async () => {
+      // Setup
+      const video = await Video.create({
+        title: 'Shampoo Prank 890111',
+        description: 'Cold Water Edition'
+      });
+
+      // Exercise
+      const response = await request(app)
+        .get(`/videos/${video._id}`);
+
+      // Verify
+      assert.include(response.text, video.title);
+    });
+  });
+})
