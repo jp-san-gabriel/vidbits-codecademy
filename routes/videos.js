@@ -6,8 +6,8 @@ router.get('/videos/create.html', (req, res) => {
 });
 
 router.post('/videos', async (req, res) => {
-  const {title, description} = req.body;
-  const video = new Video({title, description});
+  const {title, description, videoUrl} = req.body;
+  const video = new Video({title, description, videoUrl});
 
   if(title) {
     await video.save();
