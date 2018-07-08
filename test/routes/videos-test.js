@@ -29,23 +29,6 @@ describe('Server path: /videos', () => {
   });
 
   describe('POST', () => {
-    it('renders the new video', async () => {
-      // Setup
-      const videoToSave = {
-        title: 'Sample Title'
-      }
-
-      // Exercise
-      const response = await request(app)
-        .post('/videos')
-        .type('form')
-        .send(videoToSave);
-
-      // Verify
-      const savedVideo = await Video.findOne({});
-      assert.equal(response.status, 302);
-      assert.equal(response.headers.location, `/videos/${savedVideo._id}`);
-    });
 
     it('saves a video', async () => {
       // Setup
@@ -68,6 +51,24 @@ describe('Server path: /videos', () => {
       //ensure response contains video details
       assert.include(response.text, videoToSave.title);
       assert.include(response.text, videoToSave.description);
+    });
+    
+    it('renders the new video', async () => {
+      // Setup
+      const videoToSave = {
+        title: 'Sample Title'
+      }
+
+      // Exercise
+      const response = await request(app)
+        .post('/videos')
+        .type('form')
+        .send(videoToSave);
+
+      // Verify
+      const savedVideo = await Video.findOne({});
+      assert.equal(response.status, 302);
+      assert.equal(response.headers.location, `/videos/${savedVideo._id}`);
     });
 
     describe("with empty video title", () => {
