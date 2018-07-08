@@ -34,7 +34,8 @@ describe('Server path: /videos', () => {
       // Setup
       const videoToSave = {
         title: 'Shampoo Prank',
-        description: 'cold water edition'
+        description: 'cold water edition',
+        videoUrl: 'https://www.youtube.com/watch?v=oVm7FkQI4BM'
       };
 
       // Exercise
@@ -48,11 +49,12 @@ describe('Server path: /videos', () => {
       const savedVideo = await Video.findOne({});
       assert.equal(savedVideo.title, videoToSave.title);
       assert.equal(savedVideo.description, videoToSave.description);
+      assert.equal(savedVideo.videoUrl, videoToSave.videoUrl);
       //ensure response contains video details
       assert.include(response.text, videoToSave.title);
       assert.include(response.text, videoToSave.description);
     });
-    
+
     it('renders the new video', async () => {
       // Setup
       const videoToSave = {
