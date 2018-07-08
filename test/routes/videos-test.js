@@ -57,6 +57,7 @@ describe('Server path: /videos', () => {
       // Exercise
       const response = await request(app)
         .post('/videos')
+        .redirects(1)
         .type('form')
         .send(videoToSave);
 
