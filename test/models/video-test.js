@@ -31,4 +31,17 @@ describe('Model: Video', () => {
       assert.strictEqual(video.description, descriptionAsNumber.toString());
     });
   });
+
+  describe('#videoUrl', () => {
+    it('is a String', () => {
+      // Setup
+      const videoUrlAsNumber = 1;
+
+      // Exercise
+      const video = new Video({videoUrl: videoUrlAsNumber});
+
+      // Verify
+      assert.strictEqual(video.videoUrl, videoUrlAsNumber.toString());
+    });
+  });
 });
