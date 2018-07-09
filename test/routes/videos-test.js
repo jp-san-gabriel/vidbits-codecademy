@@ -79,7 +79,8 @@ describe('Server path: /videos', () => {
       it('does not save the video', async() => {
         // Setup
         const videoToSave = {
-          title: ''
+          title: '',
+          videoUrl: 'test-url.com/sample'
         };
 
         // Exercise
@@ -96,7 +97,8 @@ describe('Server path: /videos', () => {
       it('responds with a 400 status code', async () => {
         // setup
         const videoToSave = {
-          title: ''
+          title: '',
+          videoUrl: 'test-url.com/sample'
         }
         // Exercise
         const response = await request(app)
@@ -111,7 +113,8 @@ describe('Server path: /videos', () => {
       it('renders the video form', async () => {
         // setup
         const videoToSave = {
-          title: ''
+          title: '',
+          videoUrl: 'test-url.com/sample'
         };
 
         // Exercise
@@ -127,7 +130,10 @@ describe('Server path: /videos', () => {
 
       it('displays an error message', async () => {
         // setup
-        const videoToSave = { title: '' };
+        const videoToSave = {
+          title: '',
+          videoUrl: 'test-url.com/sample'
+        };
 
         // Exercise'
         const response = await request(app)
@@ -163,7 +169,10 @@ describe('Server path: /videos', () => {
     describe('with empty URL', () => {
       it('displays an error message', async () => {
         // setup
-        const videoToSave = { title: 'Sample Video Title' };
+        const videoToSave = {
+          title: 'Sample Video Title',
+          videoUrl: ''
+        };
 
         // Exercise'
         const response = await request(app)
