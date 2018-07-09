@@ -141,7 +141,8 @@ describe('Server path: /videos', () => {
         // Setup
         const videoToSave = {
           title: '',
-          description: 'This is an untitled video'
+          description: 'This is an untitled video',
+          videoUrl: 'youtube.com/2jfkld323232'
         }
 
         // Exercise
@@ -153,6 +154,7 @@ describe('Server path: /videos', () => {
         //Verify
         assert.include(response.text, 'Title is required');
         assert.include(response.text, videoToSave.description);
+        assert.include(response.text, videoToSave.videoUrl);
       });
     });
   });
