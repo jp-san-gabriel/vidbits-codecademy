@@ -235,3 +235,31 @@ describe("Server path: /videos/:id/edit", () => {
     });
   });
 });
+
+
+describe("Server path: /videos/:id/updates", () => {
+  beforeEach(connectDatabase);
+  afterEach(disconnectDatabase);
+
+  describe('POST', () => {
+    it('updates the record', async () => {
+      // Setup
+      const video = await Video.create({
+        title: 'Shampoo Prank 890111',
+        description: 'Cold water edition',
+        videoUrl: 'youtube.com/embed/jfldslie'
+      });
+
+      // Exercise
+      video.title = 'New video title';
+      const response = await request(app)
+        .post(`/videos/${video._id}/updates`)
+        .type('form')
+        .send(video.toObject());
+
+      // Verify
+      const updatedVideo = await Video.findById(video._id);
+      assert.deepEqual(video.toObject(), updatedVideo.toObject());
+    });
+  });
+});
