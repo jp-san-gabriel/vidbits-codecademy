@@ -36,8 +36,13 @@ router.get('/videos/:id/edit', async (req, res) => {
 
 router.post('/videos/:id/updates', async (req, res) => {
   const _id = req.params.id;
-  await Video.update({_id}, req.body);
-  res.redirect(`/videos/${_id}`);
+  const {title, description, videoUrl} = req.body;
+
+  await Video.updateOne({_id}, {title, description, videoUrl}, {runValidators:true}, function(err) {
+    if(!err) {
+      res.redirect(`/videos/${_id}`);
+    }
+  });
 });
 
 module.exports = router;
