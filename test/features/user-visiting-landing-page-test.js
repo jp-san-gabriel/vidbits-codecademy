@@ -35,6 +35,28 @@ describe('User visits landing page', () => {
       // Verify
       assert.equal(browser.getAttribute('iframe', 'src'), videoToSave.videoUrl);
     });
+
+    it('can navigate to a video', () => {
+      // Setup - save a video
+      const videoToSave = {
+        title: 'Shampoo Prank',
+        description: 'cold water edition',
+        videoUrl: generateRandomUrl('youtube.com')
+      }
+
+      browser.url('/videos/create.html');
+      browser.setValue('#title-input', videoToSave.title);
+      browser.setValue('#description-input', videoToSave.description);
+      browser.setValue('#videoUrl-input', videoToSave.videoUrl);
+      browser.click('#submit-button');
+
+      // Exercise
+      browser.url('/');
+      browser.click(`a=${videoToSave.title}`);
+
+      // Verify - check that we are on the video's show page: the body must contain the title
+      assert.include(browser.getText('body'), videoToSave.title);
+    });
   });
 
   describe('can navigate', () => {
