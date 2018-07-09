@@ -54,5 +54,16 @@ describe('Model: Video', () => {
       // Verify
       assert.strictEqual(video.videoUrl, videoUrlAsNumber.toString());
     });
+
+    it('is required', () => {
+      // Setup
+      const video = new Video({title: 'Sample Title'});
+
+      // Exercise
+      video.validateSync();
+
+      // Verify
+      assert.equal(video.errors.videoUrl.message, 'a URL is required');
+    });
   });
 });
