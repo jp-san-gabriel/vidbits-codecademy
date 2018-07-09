@@ -39,4 +39,25 @@ describe('User visits "Update video" page', () => {
     // Verify
     assert.include(browser.getText('body'), newTitle);
   });
+
+  it('does not create an additional video', () => {
+    // Setup
+    const videoToUpdate = {
+      title: 'Sample Video',
+      description: 'description',
+      videoUrl: generateRandomUrl('youtube.com/embed')
+    };
+    const newTitle = 'New title';
+
+    submitVideo(videoToUpdate);
+
+    // Exercise
+    browser.click('#edit');
+    browser.setValue('#title-input', newTitle);
+    browser.click('#submit-button');
+    browser.url('/'); //go back to landing page
+
+    // Verify
+    assert.notInclude(browser.getText('body'), videoToUpdate.title);
+  });
 });
