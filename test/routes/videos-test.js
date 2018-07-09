@@ -300,6 +300,9 @@ describe("Server path: /videos/:id/updates", () => {
       // Verify - check that the title still is not blank to see that it was not updated
       const updatedVideo = await Video.findById(video._id);
       assert.notEqual(updatedVideo.title, video.title);
+
+      // Verify - check that it responds with a 400
+      assert.equal(response.status, 400);
     });
   });
 });
