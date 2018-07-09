@@ -167,7 +167,8 @@ describe("Server path: /videos/:id", () => {
       // Setup
       const video = await Video.create({
         title: 'Shampoo Prank 890111',
-        description: 'Cold Water Edition'
+        description: 'Cold Water Edition',
+        videoUrl: 'youtube.com'
       });
 
       // Exercise
@@ -176,6 +177,7 @@ describe("Server path: /videos/:id", () => {
 
       // Verify
       assert.include(response.text, video.title);
+      assert.exists(getElementFromHtml(response.text, `iframe[src="${video.videoUrl}"]`));
     });
   });
 })
