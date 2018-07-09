@@ -41,6 +41,8 @@ router.post('/videos/:id/updates', async (req, res) => {
   await Video.updateOne({_id}, {title, description, videoUrl}, {runValidators:true}, function(err) {
     if(!err) {
       res.redirect(`/videos/${_id}`);
+    } else {
+      res.sendStatus(400);
     }
   });
 });
