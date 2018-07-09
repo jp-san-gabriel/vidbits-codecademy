@@ -281,5 +281,25 @@ describe("Server path: /videos/:id/updates", () => {
       assert.equal(response.status, 302);
       assert.equal(response.headers.location, `/videos/${video._id}`);
     });
+
+    it('does not save an invalid record', async () => {
+      // Setup - save the video to database
+      const video = await Video.create({
+        title: 'Shampoo Prank 890111',
+        description: 'Cold water edition',
+        videoUrl: 'youtube.com/embed/jfldslie'
+      });
+
+      // Exercise - set the video title to blank then submit the video
+      video.title = '';
+      const response = await request(app)
+        .post(`/videos/${video._id}/updates`)
+        .type('form')
+        .send(video.toObject());
+
+      // Verify - check that the title still is not blank to see that it was not updated
+      const updatedVideo = await Video.findById(video._id);
+      assert.notEqual(updatedVideo.title, video.title);
+    });
   });
 });
