@@ -209,4 +209,29 @@ describe("Server path: /videos/:id", () => {
       assert.exists(getElementFromHtml(response.text, `iframe[src="${video.videoUrl}"]`));
     });
   });
-})
+});
+
+describe("Server path: /videos/:id/edit", () => {
+  beforeEach(connectDatabase);
+  afterEach(disconnectDatabase);
+
+  describe("GET", () => {
+    it("renders a form with values of existing video", async () => {
+      // Setup
+      const video = await Video.create({
+        title: 'Shampoo Prank 890111',
+        description: 'Cold Water Edition',
+        videoUrl: 'youtube.com'
+      });
+
+      // Exercise
+      const response = await request(app)
+        .get(`/videos/${video._id}/edit`);
+
+      // Verify
+      assert.equal(getElementFromHtml(response.text, 'form input[id="title-input"]').value, video.title);
+      assert.equal(getElementFromHtml(response.text, 'form textarea[id="description-input"]').value, video.description);
+      assert.equal(getElementFromHtml(response.text, 'form input[id="videoUrl-input"]').value, video.videoUrl);
+    });
+  });
+});
