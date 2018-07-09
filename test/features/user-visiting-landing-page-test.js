@@ -1,5 +1,9 @@
 const {assert} = require('chai');
 
+const generateRandomUrl = (domain) => {
+    return `http://${domain}/${Math.random()}`;
+};
+
 describe('User visits landing page', () => {
   describe('without existing videos', () => {
     it('starts blank', () => {
@@ -17,7 +21,7 @@ describe('User visits landing page', () => {
       const videoToSave = {
         title: 'Shampoo Prank',
         description: 'cold water edition',
-        videoUrl: 'https://www.youtube.com/watch?v=oVm7FkQI4BM'
+        videoUrl: generateRandomUrl('youtube.com')
       }
 
       browser.url('/videos/create.html');
