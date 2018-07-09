@@ -4,8 +4,8 @@
 <div>
   <form method="post" action="/videos">
     <input type="text" id="title-input" name="title" placeholder="Title"/>
-    {{#if error}}
-    <span>{{error}}</span>
+    {{#if video.errors}}
+    <span>{{video.errors.title.message}}</span>
     {{/if}}
     <input type="text" id="videoUrl-input" name="videoUrl" placeholder="Video URL"/>
     <textarea id="description-input" name="description" placeholder="Description">{{video.description}}</textarea>
