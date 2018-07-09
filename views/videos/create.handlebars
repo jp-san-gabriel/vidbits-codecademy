@@ -7,7 +7,7 @@
     {{#if video.errors}}
     <span>{{video.errors.title.message}}</span>
     {{/if}}
-    <input type="text" id="videoUrl-input" name="videoUrl" placeholder="Video URL"/>
+    <input type="text" id="videoUrl-input" name="videoUrl" placeholder="Video URL" value="{{video.videoUrl}}"/>
     <textarea id="description-input" name="description" placeholder="Description">{{video.description}}</textarea>
     <button type="submit" id="submit-button">Save video</button>
   </form>
