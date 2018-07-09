@@ -1,0 +1,17 @@
+<div>
+    <h2>Update Video</h2>
+</div>
+<div>
+  <form method="post" action="/videos">
+    <input type="text" id="title-input" name="title" placeholder="Title" value="{{video.title}}"/>
+    {{#if video.errors.title}}
+    <span>{{video.errors.title.message}}</span>
+    {{/if}}
+    <input type="text" id="videoUrl-input" name="videoUrl" placeholder="Video URL" value="{{video.videoUrl}}"/>
+    {{#if video.errors.videoUrl}}
+    <span>{{video.errors.videoUrl.message}}</span>
+    {{/if}}
+    <textarea id="description-input" name="description" placeholder="Description">{{video.description}}</textarea>
+    <button type="submit" id="submit-button">Update video</button>
+  </form>
+</div>
