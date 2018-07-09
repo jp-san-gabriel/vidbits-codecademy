@@ -4,10 +4,13 @@
 <div>
   <form method="post" action="/videos">
     <input type="text" id="title-input" name="title" placeholder="Title"/>
-    {{#if video.errors}}
+    {{#if video.errors.title}}
     <span>{{video.errors.title.message}}</span>
     {{/if}}
     <input type="text" id="videoUrl-input" name="videoUrl" placeholder="Video URL" value="{{video.videoUrl}}"/>
+    {{#if video.errors.videoUrl}}
+    <span>{{video.errors.videoUrl.message}}</span>
+    {{/if}}
     <textarea id="description-input" name="description" placeholder="Description">{{video.description}}</textarea>
     <button type="submit" id="submit-button">Save video</button>
   </form>

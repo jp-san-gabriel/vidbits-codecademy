@@ -157,6 +157,22 @@ describe('Server path: /videos', () => {
         assert.include(response.text, videoToSave.videoUrl);
       });
     });
+
+    describe('with empty URL', () => {
+      it('displays an error message', async () => {
+        // setup
+        const videoToSave = { title: 'Sample Video Title' };
+
+        // Exercise'
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(videoToSave);
+
+        // Verify
+        assert.include(response.text, 'a URL is required');
+      });
+    });
   });
 });
 
