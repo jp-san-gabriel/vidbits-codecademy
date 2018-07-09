@@ -17,7 +17,8 @@ describe('Server path: /videos', () => {
       // Setup
       const existingVideo = await Video.create({
         title: 'Shampoo Prank 890111',
-        description: 'Cold Water Edition'
+        description: 'Cold Water Edition',
+        videoUrl: 'test-url.com'
       });
 
       //Exercise
@@ -58,7 +59,8 @@ describe('Server path: /videos', () => {
     it('renders the new video', async () => {
       // Setup
       const videoToSave = {
-        title: 'Sample Title'
+        title: 'Sample Title',
+        videoUrl: 'test-url.com/sample'
       }
 
       // Exercise
