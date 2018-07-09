@@ -17,6 +17,17 @@ describe('Model: Video', () => {
       // Verify
       assert.strictEqual(video.title, titleAsNumber.toString());
     });
+
+    it('is required', () => {
+      // Setup
+      const video = new Video({});
+
+      // Exercise
+      video.validateSync();
+
+      // Verify
+      assert.equal(video.errors.title.message, 'Title is required');
+    });
   });
 
   describe('#description', () => {
