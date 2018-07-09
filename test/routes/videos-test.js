@@ -261,5 +261,25 @@ describe("Server path: /videos/:id/updates", () => {
       const updatedVideo = await Video.findById(video._id);
       assert.deepEqual(video.toObject(), updatedVideo.toObject());
     });
+
+    it('redirects to the show page upon updating', async () => {
+      // Setup
+      const video = await Video.create({
+        title: 'Shampoo Prank 890111',
+        description: 'Cold water edition',
+        videoUrl: 'youtube.com/embed/jfldslie'
+      });
+
+      // Exercise
+      video.title = 'New video title';
+      const response = await request(app)
+        .post(`/videos/${video._id}/updates`)
+        .type('form')
+        .send(video.toObject());
+
+      // Verify
+      assert.equal(response.status, 302);
+      assert.equal(response.headers.location, `/videos/${video._id}`);
+    });
   });
 });
