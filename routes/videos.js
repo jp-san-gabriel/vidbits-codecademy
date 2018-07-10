@@ -42,7 +42,7 @@ router.post('/videos/:id/updates', async (req, res) => {
     if(!err) {
       res.redirect(`/videos/${_id}`);
     } else {
-      res.status(400).render('videos/update', {video: {_id, title, description, videoUrl}});
+      res.status(400).render('videos/update', {video: {_id, title, description, videoUrl, errors:err.errors}});
     }
   });
 });
