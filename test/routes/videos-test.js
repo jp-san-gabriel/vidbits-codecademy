@@ -326,6 +326,27 @@ describe("Server path: /videos/:id/updates", () => {
         assert.equal(getElementFromHtml(response.text, 'form textarea[id="description-input"]').value, video.description);
         assert.equal(getElementFromHtml(response.text, 'form input[id="videoUrl-input"]').value, video.videoUrl);
       });
+
+      it('displays validation error messages', async () => {
+        // Setup - save the video to database
+        const video = await Video.create({
+          title: 'Shampoo Prank 890111',
+          description: 'Cold water edition',
+          videoUrl: 'youtube.com/embed/jfldslie'
+        });
+
+        // Exercise - set the video url and title to blank then submit the video
+        video.videoUrl = '';
+        video.title = '';
+        const response = await request(app)
+          .post(`/videos/${video._id}/updates`)
+          .type('form')
+          .send(video.toObject());
+
+        // Verify that the response text contains the validation error messages
+        assert.include(response.text, 'Title is required');
+        assert.include(response.text, 'a URL is required');
+      });
     });
   });
 });
