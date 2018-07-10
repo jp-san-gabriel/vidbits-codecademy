@@ -6,7 +6,7 @@ body {
 }
 
 .add-video-button {
-  text-align: center; 
+  text-align: center;
   background-color: #ff9b34;
   border: none;
   color: white;
@@ -69,7 +69,7 @@ form input[name=title] {
   padding: 5px;
 }
 
-form input[name=url] {
+form input[name=videoUrl] {
   display: block;
   margin: 0 auto;
   margin-bottom: 40px;
@@ -98,7 +98,7 @@ form textarea {
 /* Show page */
 
 .input-button {
-  text-align: center; 
+  text-align: center;
   background-color: #ff9b34;
   border: none;
   color: white;
@@ -113,10 +113,3 @@ form textarea {
 .video-description {
   padding: 30px 10px;
 }
-
-
-
-
-
-
-
