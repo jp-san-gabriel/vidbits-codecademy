@@ -1,16 +1,13 @@
 <div class="contents-container">
 
-  <a id="edit" href="/videos/{{video._id}}/edit"  class="input-button">
-    <div>
-      <p>Update</p>
-    </div>
-  </a>
-
-  <form method="post" action="/videos/{{video._id}}/deletions">
-    <button type="submit" class="input-button" id="delete">Delete</delete>
-  </form>
-
   <div class="video-card">
+    <form action="/videos/{{video._id}}/edit" method="get">
+      <button type="submit" class="input-button" id="edit">Update</button>
+    </form>
+    
+    <form method="post" action="/videos/{{video._id}}/deletions">
+      <button type="submit" class="input-button" id="delete">Delete</button>
+    </form>
 
     <div class="video-title">
       <h1>{{video.title}}</h1>
