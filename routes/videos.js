@@ -50,7 +50,7 @@ router.post('/videos/:id/updates', async (req, res) => {
 router.post('/videos/:id/deletions', async (req, res) => {
   const _id = req.params.id;
   await Video.deleteOne({_id});
-  res.send('');
+  res.redirect('/');
 });
 
 module.exports = router;
