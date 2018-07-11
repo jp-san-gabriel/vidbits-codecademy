@@ -350,3 +350,27 @@ describe("Server path: /videos/:id/updates", () => {
     });
   });
 });
+
+
+describe('Server path /videos/:id/deletions', () => {
+  beforeEach(connectDatabase);
+  afterEach(disconnectDatabase);
+
+  describe('POST', () => {
+    it('removes the record', async () => {
+      // Setup - save a video to database
+      const video = await Video.create({
+        title: 'Video Title',
+        description: 'Video description',
+        videoUrl: 'https://youtube.com/embed/jfkdls3232'
+      });
+
+      // Exercise - send a post to '/videos/:id/deletions'
+      const response = await request(app)
+        .post(`/videos/${video._id}/deletions`);
+
+      // Verify - assert that database is empty
+      assert.isEmpty(await Video.find({}));
+    });
+  });
+});
