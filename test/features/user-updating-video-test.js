@@ -1,4 +1,5 @@
 const {assert} = require('chai');
+const {buildVideoObject} = require('../test-utilities');
 
 const generateRandomUrl = (domain) => {
     return `http://${domain}/${Math.random()}`;
@@ -22,11 +23,7 @@ const submitVideo = (video) => {
 describe('User visits "Update video" page', () => {
   it('changes the values', () => {
     // Setup
-    const videoToUpdate = {
-      title: 'Sample Video',
-      description: 'description',
-      videoUrl: generateRandomUrl('youtube.com/embed')
-    };
+    const videoToUpdate = buildVideoObject();
     const newTitle = 'New title';
 
     submitVideo(videoToUpdate);
@@ -42,11 +39,7 @@ describe('User visits "Update video" page', () => {
 
   it('does not create an additional video', () => {
     // Setup
-    const videoToUpdate = {
-      title: 'Sample Video',
-      description: 'description',
-      videoUrl: generateRandomUrl('youtube.com/embed')
-    };
+    const videoToUpdate = buildVideoObject();
     const newTitle = 'New title';
 
     submitVideo(videoToUpdate);
