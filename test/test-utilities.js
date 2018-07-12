@@ -20,7 +20,16 @@ function buildVideoObject(video = {}) {
   };
 }
 
+const submitVideo = (video) => {
+  browser.url('/videos/create.html');
+  browser.setValue('#title-input', video.title || '');
+  browser.setValue('#description-input', video.description || '');
+  browser.setValue('#videoUrl-input', video.videoUrl || '');
+  browser.click('#submit-button');
+};
+
 module.exports = {
   getElementFromHtml,
-  buildVideoObject
+  buildVideoObject,
+  submitVideo
 };

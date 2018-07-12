@@ -1,20 +1,5 @@
 const {assert} = require('chai');
-const {buildVideoObject} = require('../test-utilities');
-
-// This function prevents runtime error in case value is undefined
-const setElementValue = (selector, value) => {
-    if(value) {
-      browser.setValue(selector, value);
-    }
-};
-
-const submitVideo = (video) => {
-  browser.url('/videos/create.html');
-  setElementValue('#title-input', video.title);
-  setElementValue('#description-input', video.description);
-  setElementValue('#videoUrl-input', video.videoUrl);
-  browser.click('#submit-button');
-};
+const {buildVideoObject, submitVideo} = require('../test-utilities');
 
 describe('User visits landing page', () => {
   describe('without existing videos', () => {
