@@ -1,14 +1,12 @@
 const {assert} = require('chai');
+const {buildVideoObject} = require('../test-utilities');
 
 describe('User deleting video', () => {
 
   it('removes the Video from the list', () => {
     // Setup - submit a video
-    const videoToSave = {
-      title: 'Video Title',
-      description: 'Video description',
-      videoUrl: 'http://youtube.com/32lsdfje'
-    };
+    const videoToSave = buildVideoObject();
+    
     browser.url('/videos/create.html');
     browser.setValue('#title-input', videoToSave.title);
     browser.setValue('#description-input', videoToSave.description);
