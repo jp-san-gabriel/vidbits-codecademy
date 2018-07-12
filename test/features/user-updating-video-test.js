@@ -1,10 +1,6 @@
 const {assert} = require('chai');
 const {buildVideoObject} = require('../test-utilities');
 
-const generateRandomUrl = (domain) => {
-    return `http://${domain}/${Math.random()}`;
-};
-
 // This function prevents runtime error in case value is undefined
 const setElementValue = (selector, value) => {
     if(value) {
