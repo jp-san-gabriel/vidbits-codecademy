@@ -1,4 +1,5 @@
 const {assert} = require('chai');
+const {buildVideoObject} = require('../test-utilities');
 
 const generateRandomUrl = (domain) => {
     return `http://${domain}/${Math.random()}`;
@@ -33,11 +34,7 @@ describe('User visits landing page', () => {
   describe('with existing videos', () => {
     it('renders it in the list', () => {
       // Setup - save a video
-      const videoToSave = {
-        title: 'Shampoo Prank',
-        description: 'cold water edition',
-        videoUrl: generateRandomUrl('youtube.com')
-      }
+      const videoToSave = buildVideoObject();
 
       submitVideo(videoToSave);
 
@@ -50,11 +47,7 @@ describe('User visits landing page', () => {
 
     it('can navigate to a video', () => {
       // Setup - save a video
-      const videoToSave = {
-        title: 'Shampoo Prank',
-        description: 'cold water edition',
-        videoUrl: generateRandomUrl('youtube.com')
-      }
+      const videoToSave = buildVideoObject();
 
       submitVideo(videoToSave);
 
