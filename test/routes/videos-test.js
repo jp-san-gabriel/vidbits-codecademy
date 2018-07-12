@@ -3,7 +3,7 @@ const request = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
 const {connectDatabase, disconnectDatabase} = require('../database-utilities');
-const {getElementFromHtml} = require('../test-utilities');
+const {getElementFromHtml, buildVideoObject} = require('../test-utilities');
 
 describe('Server path: /videos', () => {
   // Setup Phase
@@ -15,11 +15,7 @@ describe('Server path: /videos', () => {
   describe('GET', () => {
     it('renders existing videos', async () => {
       // Setup
-      const existingVideo = await Video.create({
-        title: 'Shampoo Prank 890111',
-        description: 'Cold Water Edition',
-        videoUrl: 'test-url.com'
-      });
+      const existingVideo = await Video.create(buildVideoObject());
 
       //Exercise
       const response = await request(app).get('/videos');
@@ -33,11 +29,7 @@ describe('Server path: /videos', () => {
 
     it('saves a video', async () => {
       // Setup
-      const videoToSave = {
-        title: 'Shampoo Prank',
-        description: 'cold water edition',
-        videoUrl: 'https://www.youtube.com/watch?v=oVm7FkQI4BM'
-      };
+      const videoToSave = buildVideoObject();
 
       // Exercise
       const response = await request(app)
@@ -58,10 +50,7 @@ describe('Server path: /videos', () => {
 
     it('renders the new video', async () => {
       // Setup
-      const videoToSave = {
-        title: 'Sample Title',
-        videoUrl: 'test-url.com/sample'
-      }
+      const videoToSave = buildVideoObject();
 
       // Exercise
       const response = await request(app)
@@ -78,10 +67,7 @@ describe('Server path: /videos', () => {
     describe("with empty video title", () => {
       it('does not save the video', async() => {
         // Setup
-        const videoToSave = {
-          title: '',
-          videoUrl: 'test-url.com/sample'
-        };
+        const videoToSave = buildVideoObject({title: ''});
 
         // Exercise
         await request(app)
@@ -96,10 +82,7 @@ describe('Server path: /videos', () => {
 
       it('responds with a 400 status code', async () => {
         // setup
-        const videoToSave = {
-          title: '',
-          videoUrl: 'test-url.com/sample'
-        }
+        const videoToSave = buildVideoObject({title: ''});
         // Exercise
         const response = await request(app)
           .post('/videos')
@@ -112,10 +95,7 @@ describe('Server path: /videos', () => {
 
       it('renders the video form', async () => {
         // setup
-        const videoToSave = {
-          title: '',
-          videoUrl: 'test-url.com/sample'
-        };
+        const videoToSave = buildVideoObject({title: ''});
 
         // Exercise
         const response = await request(app)
@@ -130,10 +110,7 @@ describe('Server path: /videos', () => {
 
       it('displays an error message', async () => {
         // setup
-        const videoToSave = {
-          title: '',
-          videoUrl: 'test-url.com/sample'
-        };
+        const videoToSave = buildVideoObject({title: ''});
 
         // Exercise'
         const response = await request(app)
@@ -147,11 +124,7 @@ describe('Server path: /videos', () => {
 
       it('preserves the other field values', async () => {
         // Setup
-        const videoToSave = {
-          title: '',
-          description: 'This is an untitled video',
-          videoUrl: 'youtube.com/2jfkld323232'
-        }
+        const videoToSave = buildVideoObject({title: ''});
 
         // Exercise
         const response = await request(app)
@@ -169,10 +142,7 @@ describe('Server path: /videos', () => {
     describe('with empty URL', () => {
       it('displays an error message', async () => {
         // setup
-        const videoToSave = {
-          title: 'Sample Video Title',
-          videoUrl: ''
-        };
+        const videoToSave = buildVideoObject({videoUrl: ''});
 
         // Exercise'
         const response = await request(app)
@@ -194,11 +164,7 @@ describe("Server path: /videos/:id", () => {
   describe("GET", () => {
     it("renders the video", async () => {
       // Setup
-      const video = await Video.create({
-        title: 'Shampoo Prank 890111',
-        description: 'Cold Water Edition',
-        videoUrl: 'youtube.com'
-      });
+      const video = await Video.create(buildVideoObject());
 
       // Exercise
       const response = await request(app)
@@ -218,11 +184,7 @@ describe("Server path: /videos/:id/edit", () => {
   describe("GET", () => {
     it("renders a form with values of existing video", async () => {
       // Setup
-      const video = await Video.create({
-        title: 'Shampoo Prank 890111',
-        description: 'Cold Water Edition',
-        videoUrl: 'youtube.com'
-      });
+      const video = await Video.create(buildVideoObject());
 
       // Exercise
       const response = await request(app)
@@ -244,11 +206,7 @@ describe("Server path: /videos/:id/updates", () => {
   describe('POST', () => {
     it('updates the record', async () => {
       // Setup
-      const video = await Video.create({
-        title: 'Shampoo Prank 890111',
-        description: 'Cold water edition',
-        videoUrl: 'youtube.com/embed/jfldslie'
-      });
+      const video = await Video.create(buildVideoObject());
 
       // Exercise
       video.title = 'New video title';
@@ -264,11 +222,7 @@ describe("Server path: /videos/:id/updates", () => {
 
     it('redirects to the show page upon updating', async () => {
       // Setup
-      const video = await Video.create({
-        title: 'Shampoo Prank 890111',
-        description: 'Cold water edition',
-        videoUrl: 'youtube.com/embed/jfldslie'
-      });
+      const video = await Video.create(buildVideoObject());
 
       // Exercise
       video.title = 'New video title';
@@ -285,11 +239,7 @@ describe("Server path: /videos/:id/updates", () => {
     describe('when input is invalid', () => {
       it('does not save the record', async () => {
         // Setup - save the video to database
-        const video = await Video.create({
-          title: 'Shampoo Prank 890111',
-          description: 'Cold water edition',
-          videoUrl: 'youtube.com/embed/jfldslie'
-        });
+        const video = await Video.create(buildVideoObject());
 
         // Exercise - set the video title to blank then submit the video
         video.title = '';
@@ -308,11 +258,7 @@ describe("Server path: /videos/:id/updates", () => {
 
       it('renders the edit form', async () => {
         // Setup - save the video to database
-        const video = await Video.create({
-          title: 'Shampoo Prank 890111',
-          description: 'Cold water edition',
-          videoUrl: 'youtube.com/embed/jfldslie'
-        });
+        const video = await Video.create(buildVideoObject());
 
         // Exercise - set the video title to blank then submit the video
         video.title = '';
@@ -329,11 +275,7 @@ describe("Server path: /videos/:id/updates", () => {
 
       it('displays validation error messages', async () => {
         // Setup - save the video to database
-        const video = await Video.create({
-          title: 'Shampoo Prank 890111',
-          description: 'Cold water edition',
-          videoUrl: 'youtube.com/embed/jfldslie'
-        });
+        const video = await Video.create(buildVideoObject());
 
         // Exercise - set the video url and title to blank then submit the video
         video.videoUrl = '';
@@ -359,11 +301,7 @@ describe('Server path /videos/:id/deletions', () => {
   describe('POST', () => {
     it('removes the record', async () => {
       // Setup - save a video to database
-      const video = await Video.create({
-        title: 'Video Title',
-        description: 'Video description',
-        videoUrl: 'https://youtube.com/embed/jfkdls3232'
-      });
+      const video = await Video.create(buildVideoObject());
 
       // Exercise - send a post to '/videos/:id/deletions'
       const response = await request(app)
@@ -375,11 +313,7 @@ describe('Server path /videos/:id/deletions', () => {
 
     it('redirects to landing page', async () => {
       // Setup - save a video to database
-      const video = await Video.create({
-        title: 'Video Title',
-        description: 'Video description',
-        videoUrl: 'https://youtube.com/embed/jfkdls3232'
-      });
+      const video = await Video.create(buildVideoObject());
 
       // Exercise - send a post to '/videos/:id/deletions'
       const response = await request(app)
