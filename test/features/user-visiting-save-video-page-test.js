@@ -1,5 +1,5 @@
 const {assert} = require('chai');
-const {buildVideoObject} = require('../test-utilities');
+const {buildVideoObject, submitVideo} = require('../test-utilities');
 
 describe('User visits "Save Video" page', () => {
   describe('posts a new item', () => {
@@ -16,13 +16,9 @@ describe('User visits "Save Video" page', () => {
     it('and is rendered', () => {
       // Setup
       const videoToSave = buildVideoObject();
-      
+
       // Exercise
-      browser.url('/videos/create.html');
-      browser.setValue('#title-input', videoToSave.title);
-      browser.setValue('#description-input', videoToSave.description);
-      browser.setValue('#videoUrl-input', videoToSave.videoUrl);
-      browser.click('#submit-button');
+      submitVideo(videoToSave);
 
       // Verify
       assert.include(browser.getText('body'), videoToSave.title);
