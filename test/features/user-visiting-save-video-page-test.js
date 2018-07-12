@@ -1,4 +1,5 @@
 const {assert} = require('chai');
+const {buildVideoObject} = require('../test-utilities');
 
 describe('User visits "Save Video" page', () => {
   describe('posts a new item', () => {
@@ -14,11 +15,8 @@ describe('User visits "Save Video" page', () => {
 
     it('and is rendered', () => {
       // Setup
-      const videoToSave = {
-        title: 'Shampoo Prank',
-        description: 'cold water edition',
-        videoUrl: 'https://www.youtube.com/watch?v=oVm7FkQI4BM'
-      }
+      const videoToSave = buildVideoObject();
+      
       // Exercise
       browser.url('/videos/create.html');
       browser.setValue('#title-input', videoToSave.title);
