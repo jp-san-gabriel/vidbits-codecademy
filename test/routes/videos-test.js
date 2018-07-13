@@ -3,7 +3,7 @@ const request = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
 const {connectDatabase, disconnectDatabase} = require('../database-utilities');
-const {getElementFromHtml, buildVideoObject} = require('../test-utilities');
+const {getElementFromHtml, buildVideoObject, seedVideoToDatabase} = require('../test-utilities');
 
 describe('Server path: /videos', () => {
   // Setup Phase
@@ -164,7 +164,7 @@ describe("Server path: /videos/:id", () => {
   describe("GET", () => {
     it("renders the video", async () => {
       // Setup
-      const video = await Video.create(buildVideoObject());
+      const video = await seedVideoToDatabase();
 
       // Exercise
       const response = await request(app)
@@ -184,7 +184,7 @@ describe("Server path: /videos/:id/edit", () => {
   describe("GET", () => {
     it("renders a form with values of existing video", async () => {
       // Setup
-      const video = await Video.create(buildVideoObject());
+      const video = await seedVideoToDatabase();
 
       // Exercise
       const response = await request(app)
@@ -206,7 +206,7 @@ describe("Server path: /videos/:id/updates", () => {
   describe('POST', () => {
     it('updates the record', async () => {
       // Setup
-      const video = await Video.create(buildVideoObject());
+      const video = await seedVideoToDatabase();
 
       // Exercise
       video.title = 'New video title';
@@ -222,7 +222,7 @@ describe("Server path: /videos/:id/updates", () => {
 
     it('redirects to the show page upon updating', async () => {
       // Setup
-      const video = await Video.create(buildVideoObject());
+      const video =await seedVideoToDatabase();
 
       // Exercise
       video.title = 'New video title';
@@ -239,7 +239,7 @@ describe("Server path: /videos/:id/updates", () => {
     describe('when input is invalid', () => {
       it('does not save the record', async () => {
         // Setup - save the video to database
-        const video = await Video.create(buildVideoObject());
+        const video = await seedVideoToDatabase();
 
         // Exercise - set the video title to blank then submit the video
         video.title = '';
@@ -258,7 +258,7 @@ describe("Server path: /videos/:id/updates", () => {
 
       it('renders the edit form', async () => {
         // Setup - save the video to database
-        const video = await Video.create(buildVideoObject());
+        const video = await seedVideoToDatabase();
 
         // Exercise - set the video title to blank then submit the video
         video.title = '';
@@ -275,7 +275,7 @@ describe("Server path: /videos/:id/updates", () => {
 
       it('displays validation error messages', async () => {
         // Setup - save the video to database
-        const video = await Video.create(buildVideoObject());
+        const video = await seedVideoToDatabase();
 
         // Exercise - set the video url and title to blank then submit the video
         video.videoUrl = '';
@@ -301,7 +301,7 @@ describe('Server path /videos/:id/deletions', () => {
   describe('POST', () => {
     it('removes the record', async () => {
       // Setup - save a video to database
-      const video = await Video.create(buildVideoObject());
+      const video = await seedVideoToDatabase();
 
       // Exercise - send a post to '/videos/:id/deletions'
       const response = await request(app)
@@ -313,7 +313,7 @@ describe('Server path /videos/:id/deletions', () => {
 
     it('redirects to landing page', async () => {
       // Setup - save a video to database
-      const video = await Video.create(buildVideoObject());
+      const video = await seedVideoToDatabase();
 
       // Exercise - send a post to '/videos/:id/deletions'
       const response = await request(app)
