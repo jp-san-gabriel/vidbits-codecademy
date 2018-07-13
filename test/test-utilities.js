@@ -1,4 +1,5 @@
 const {jsdom} = require('jsdom');
+const Video = require('../models/video');
 
 function getElementFromHtml(html, selector) {
   const selectedElement= jsdom(html).querySelector(selector);
@@ -20,6 +21,12 @@ function buildVideoObject(video = {}) {
   };
 }
 
+// Adds a Video to database
+const seedVideoToDatabase = async (options = {}) => {
+  const vid = await Video.create(buildVideoObject(options));
+  return vid;
+};
+
 const submitVideo = (video) => {
   browser.url('/videos/create.html');
   browser.setValue('#title-input', video.title || '');
@@ -31,5 +38,6 @@ const submitVideo = (video) => {
 module.exports = {
   getElementFromHtml,
   buildVideoObject,
-  submitVideo
+  submitVideo,
+  seedVideoToDatabase
 };
