@@ -59,8 +59,12 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  const {user} = req.body;
-  res.redirect('/');
+  const {user, password} = req.body;
+  if(user === 'admin' && password == 'password') {
+    res.redirect('/');
+  } else {
+    res.render('login', {error: 'Invalid username or password'});
+  }
 });
 
 module.exports = router;
