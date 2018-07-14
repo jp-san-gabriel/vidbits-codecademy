@@ -53,4 +53,17 @@ describe('User visits landing page', () => {
       assert.include(browser.getText('body'), "Save a video");
     });
   });
+
+  describe('when user is not logged in', () => {
+    it('can navigate to login page', () => {
+      // Setup
+      browser.url('/');
+
+      // Exercise
+      browser.click('a[href="/login"]');
+
+      // Verify
+      assert.include(browser.getText('body'), 'Log in');
+    });
+  });
 });
