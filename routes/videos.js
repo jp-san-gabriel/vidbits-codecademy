@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Video = require('../models/video');
+const querystring = require('querystring');
 
 router.get('/videos/create.html', (req, res) => {
   res.render('videos/create');
@@ -59,7 +60,7 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res) => {
   const {user} = req.body;
-  res.render('videos/index', {user});
+  res.redirect('/');
 });
 
 module.exports = router;
