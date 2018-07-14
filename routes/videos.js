@@ -53,4 +53,8 @@ router.post('/videos/:id/deletions', async (req, res) => {
   res.redirect('/');
 });
 
+router.get('/login', (req, res) => {
+  res.render('login');
+});
+
 module.exports = router;
