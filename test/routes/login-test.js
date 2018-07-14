@@ -16,4 +16,21 @@ describe('Server path: /login', () => {
       assert.equal(getElementFromHtml(response.text, 'form input[type="password"][name="password"]').value, '');
     });
   });
+
+  describe('POST', () => {
+    it('logs in the user', async () => {
+      // Setup
+      const user = 'admin';
+      const password = 'password';
+
+      // Exercise - send the username and password
+      const response = await request(app)
+        .post('/login')
+        .type('form')
+        .send({user, password});
+
+      // Verify - that the response contains the username
+      assert.include(response.text, user);
+    });
+  });
 });
