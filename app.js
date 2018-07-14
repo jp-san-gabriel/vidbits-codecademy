@@ -4,6 +4,7 @@ const expressHandlebars = require('express-handlebars');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const videosRoute = require('./routes/videos.js');
+const session = require('express-session');
 
 const app = express();
 
@@ -17,6 +18,19 @@ if (process.env.NODE_ENV !== 'test') {
 }
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Use express-session middleware
+app.use(session({
+  secret:'this-is-the-session-secret',
+  saveUninitialized: true,
+  resave: false
+}));
+
+// Pass session data to response so that it is accessible from the view
+app.use((req, res, next) => {
+  res.locals.session = req.session
+  return next();
+});
 
 app.get('/', (req, res) => {
   res.redirect('/videos');
