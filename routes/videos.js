@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Video = require('../models/video');
 const querystring = require('querystring');
+const {authenticate} = require('../authenticate');
 
 router.get('/videos/create.html', (req, res) => {
   res.render('videos/create');
@@ -60,7 +61,7 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res) => {
   const {user, password} = req.body;
-  if(user === 'admin' && password == 'password') {
+  if(authenticate({user, password})) {
     res.redirect('/');
   } else {
     res.render('login', {error: 'Invalid username or password'});
