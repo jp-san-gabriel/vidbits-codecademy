@@ -6,7 +6,7 @@
     {{#if video.errors.title}}
     <span>{{video.errors.title.message}}</span>
     {{/if}}
-    <input type="text" id="title-input" name="title" placeholder="Title"/>
+    <input type="text" id="title-input" name="title" placeholder="Title" value="{{video.title}}"/>
     {{#if video.errors.videoUrl}}
     <span>{{video.errors.videoUrl.message}}</span>
     {{/if}}
