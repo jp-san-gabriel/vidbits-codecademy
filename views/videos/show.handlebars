@@ -4,7 +4,7 @@
     <form action="/videos/{{video._id}}/edit" method="get">
       <button type="submit" class="input-button" id="edit">Update</button>
     </form>
-    
+
     <form method="post" action="/videos/{{video._id}}/deletions">
       <button type="submit" class="input-button" id="delete">Delete</button>
     </form>
@@ -13,7 +13,7 @@
       <h1>{{video.title}}</h1>
     </div>
 
-    <iframe class="video-player" src="{{video.videoUrl}}" allowfullscreen></iframe>
+    <iframe class="video-player" src="{{video.videoUrl}}" frameborder="0" allowfullscreen></iframe>
 
     <div class="video-description">
       <p>{{video.description}}</p>
