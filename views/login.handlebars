@@ -1,5 +1,8 @@
 <h2>Log in</h2>
 <form method="post" action="/login">
+  {{#if error}}
+  <span>{{error}}</span>
+  {{/if}}
   <input type="text" name="user" placeholder="User name"/>
   <input type="password" name="password" placeholder="Password"/>
   <button type="submit">Log in</button>
