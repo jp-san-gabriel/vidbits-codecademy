@@ -153,6 +153,22 @@ describe('Server path: /videos', () => {
         // Verify
         assert.include(response.text, 'a URL is required');
       });
+
+      it('preserves the other field values', async () => {
+        // Setup
+        const videoToSave = buildVideoObject({videoUrl: ''});
+
+        // Exercise
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(videoToSave);
+
+        //Verify
+        assert.include(response.text, 'a URL is required');
+        assert.include(response.text, videoToSave.title);
+        assert.include(response.text, videoToSave.description);
+      });
     });
   });
 });
