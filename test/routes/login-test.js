@@ -55,5 +55,20 @@ describe('Server path: /login', () => {
       assert.equal(response.status, 302);
       assert.equal(response.headers.location, '/');
     });
+
+    it('displays an error message with incorrect credentials', async () => {
+      // Setup
+      const user = 'invalid_username';
+      const password = 'invalid_password';
+
+      // Exercise - send the username and password
+      const response = await request(app)
+        .post('/login')
+        .type('form')
+        .send({user, password});
+
+      // Verify
+      assert.include(response.text, 'Invalid username or password');
+    });
   });
 });
