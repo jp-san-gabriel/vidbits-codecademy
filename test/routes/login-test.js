@@ -1,12 +1,17 @@
 const {assert} = require('chai');
-const request = require('supertest');
+const supertest = require('supertest');
 const app = require('../../app');
 const {getElementFromHtml, getValidCredentials} = require('../test-utilities');
 const {connectDatabase, disconnectDatabase} = require('../database-utilities');
 
 describe('Server path: /login', () => {
+  let request = null;
+
   // Setup Phase
-  beforeEach(connectDatabase);
+  beforeEach(async () => {
+    await connectDatabase();
+    request = supertest.agent(app);
+  });
 
   // Teardown Phase
   afterEach(disconnectDatabase);
@@ -16,7 +21,7 @@ describe('Server path: /login', () => {
       // setup
 
       // Exercise
-      const response = await request(app).get('/login');
+      const response = await request.get('/login');
 
       // Verify
       assert.equal(getElementFromHtml(response.text, 'form input[type="text"][name="user"]').value, '');
@@ -28,8 +33,9 @@ describe('Server path: /login', () => {
     it('logs in the user', async () => {
       // Setup
       const credentials = getValidCredentials();
+      
       // Exercise - send the username and password
-      const response = await request(app)
+      const response = await request
               .post('/login')
               .redirects()
               .type('form')
@@ -44,7 +50,7 @@ describe('Server path: /login', () => {
       const credentials = getValidCredentials();
 
       // Exercise - send the username and password
-      const response = await request(app)
+      const response = await request
         .post('/login')
         .type('form')
         .send(credentials);
@@ -60,7 +66,7 @@ describe('Server path: /login', () => {
       const password = 'invalid_password';
 
       // Exercise - send the username and password
-      const response = await request(app)
+      const response = await request
         .post('/login')
         .type('form')
         .send({user, password});
