@@ -62,6 +62,7 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   const {user, password} = req.body;
   if(authenticate({user, password})) {
+    req.session.user = user;
     res.redirect('/');
   } else {
     res.render('login', {error: 'Invalid username or password'});
