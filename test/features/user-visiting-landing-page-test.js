@@ -1,5 +1,5 @@
 const {assert} = require('chai');
-const {buildVideoObject, submitVideo} = require('../test-utilities');
+const {buildVideoObject, submitVideo, login, logout} = require('../test-utilities');
 
 describe('User visits landing page', () => {
   describe('without existing videos', () => {
@@ -13,6 +13,9 @@ describe('User visits landing page', () => {
   });
 
   describe('with existing videos', () => {
+    beforeEach(login);
+    afterEach(logout);
+
     it('renders it in the list', () => {
       // Setup - save a video
       const videoToSave = buildVideoObject();
@@ -42,6 +45,9 @@ describe('User visits landing page', () => {
   });
 
   describe('can navigate', () => {
+    beforeEach(login);
+    afterEach(logout);
+    
     it('to save video page', () => {
       // Setup
       browser.url('/');

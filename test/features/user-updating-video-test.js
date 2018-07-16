@@ -1,7 +1,10 @@
 const {assert} = require('chai');
-const {buildVideoObject, submitVideo} = require('../test-utilities');
+const {buildVideoObject, submitVideo, login, logout} = require('../test-utilities');
 
 describe('User visits "Update video" page', () => {
+  beforeEach(login);
+  afterEach(logout);
+  
   it('changes the values', () => {
     // Setup
     const videoToUpdate = buildVideoObject();

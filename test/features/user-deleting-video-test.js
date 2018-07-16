@@ -1,7 +1,9 @@
 const {assert} = require('chai');
-const {buildVideoObject, submitVideo} = require('../test-utilities');
+const {buildVideoObject, submitVideo, login, logout} = require('../test-utilities');
 
 describe('User deleting video', () => {
+  beforeEach(login);
+  afterEach(logout);
 
   it('removes the Video from the list', () => {
     // Setup - submit a video

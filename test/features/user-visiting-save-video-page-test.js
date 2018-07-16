@@ -1,7 +1,10 @@
 const {assert} = require('chai');
-const {buildVideoObject, submitVideo} = require('../test-utilities');
+const {buildVideoObject, submitVideo, login, logout} = require('../test-utilities');
 
 describe('User visits "Save Video" page', () => {
+  beforeEach(login);
+  afterEach(logout);
+
   describe('posts a new item', () => {
 
     it('to path "/videos"', () => {
