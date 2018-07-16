@@ -55,7 +55,11 @@ form {
   padding-bottom: 10px;
 }
 
-form input[name=title] {
+.login-form {
+  width: 50%;
+}
+
+form input, input[name=title] {
   display: block;
   margin: 0 auto;
   margin-bottom: 40px;

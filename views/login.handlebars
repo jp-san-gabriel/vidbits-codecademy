@@ -16,13 +16,13 @@
     </div>
 
     <h2>Log in</h2>
-    <form method="post" action="/login">
+    <form method="post" action="/login" class="login-form">
       {{#if error}}
       <span>{{error}}</span>
       {{/if}}
       <input type="text" name="user" placeholder="User name"/>
       <input type="password" name="password" placeholder="Password"/>
-      <button type="submit" id="log-in">Log in</button>
+      <button type="submit" id="log-in" class="input-button">Log in</button>
     </form>
 
   </body>
