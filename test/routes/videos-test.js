@@ -3,7 +3,7 @@ const request = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
 const {connectDatabase, disconnectDatabase} = require('../database-utilities');
-const {getElementFromHtml, buildVideoObject, seedVideoToDatabase} = require('../test-utilities');
+const {getElementFromHtml, buildVideoObject, seedVideoToDatabase, getValidCredentials} = require('../test-utilities');
 
 describe('Server path: /videos', () => {
   // Setup Phase
@@ -40,147 +40,167 @@ describe('Server path: /videos', () => {
       });
     });
 
-    it('saves a video', async () => {
-      // Setup
-      const videoToSave = buildVideoObject();
+    describe('when user is logged in', () => {
 
-      // Exercise
-      const response = await request(app)
-        .post('/videos')
-        .redirects(1)
-        .type('form')
-        .send(videoToSave);
+      let authenticatedRequest = null;
 
-      // Verify
-      const savedVideo = await Video.findOne({});
-      assert.equal(savedVideo.title, videoToSave.title);
-      assert.equal(savedVideo.description, videoToSave.description);
-      assert.equal(savedVideo.videoUrl, videoToSave.videoUrl);
-      //ensure response contains video details
-      assert.include(response.text, videoToSave.title);
-      assert.include(response.text, videoToSave.description);
-    });
+      // Setup Phase - initialize an authenticated request
+      beforeEach(async () => {
+        authenticatedRequest = request.agent(app);
+        const credentials = getValidCredentials();
+        await authenticatedRequest
+          .post('/login')
+          .type('form')
+          .send(credentials);
+      });
 
-    it('renders the new video', async () => {
-      // Setup
-      const videoToSave = buildVideoObject();
+      // Teardown - logout
+      afterEach(async () => {
+        await authenticatedRequest.get('/logout');
+      });
 
-      // Exercise
-      const response = await request(app)
-        .post('/videos')
-        .type('form')
-        .send(videoToSave);
-
-      // Verify
-      const savedVideo = await Video.findOne({});
-      assert.equal(response.status, 302);
-      assert.equal(response.headers.location, `/videos/${savedVideo._id}`);
-    });
-
-    describe("with empty video title", () => {
-      it('does not save the video', async() => {
+      it('saves a video', async () => {
         // Setup
-        const videoToSave = buildVideoObject({title: ''});
+        const videoToSave = buildVideoObject();
 
         // Exercise
-        await request(app)
+        const response = await authenticatedRequest
           .post('/videos')
+          .redirects(1)
           .type('form')
           .send(videoToSave);
 
         // Verify
-        const videos = await Video.find({});
-        assert.isEmpty(videos);
-      });
-
-      it('responds with a 400 status code', async () => {
-        // setup
-        const videoToSave = buildVideoObject({title: ''});
-        // Exercise
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(videoToSave);
-
-        //Verify
-        assert.equal(response.status, 400);
-      });
-
-      it('renders the video form', async () => {
-        // setup
-        const videoToSave = buildVideoObject({title: ''});
-
-        // Exercise
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(videoToSave);
-
-        // Verify
-        assert.exists(getElementFromHtml(response.text,'form input[name="title"]'),
-          'could not find input with name "title"');
-      });
-
-      it('displays an error message', async () => {
-        // setup
-        const videoToSave = buildVideoObject({title: ''});
-
-        // Exercise'
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(videoToSave);
-
-        // Verify
-        assert.include(response.text, 'Title is required');
-      });
-
-      it('preserves the other field values', async () => {
-        // Setup
-        const videoToSave = buildVideoObject({title: ''});
-
-        // Exercise
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(videoToSave);
-
-        //Verify
-        assert.include(response.text, 'Title is required');
-        assert.include(response.text, videoToSave.description);
-        assert.include(response.text, videoToSave.videoUrl);
-      });
-    });
-
-    describe('with empty URL', () => {
-      it('displays an error message', async () => {
-        // setup
-        const videoToSave = buildVideoObject({videoUrl: ''});
-
-        // Exercise'
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(videoToSave);
-
-        // Verify
-        assert.include(response.text, 'a URL is required');
-      });
-
-      it('preserves the other field values', async () => {
-        // Setup
-        const videoToSave = buildVideoObject({videoUrl: ''});
-
-        // Exercise
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(videoToSave);
-
-        //Verify
-        assert.include(response.text, 'a URL is required');
+        const savedVideo = await Video.findOne({});
+        assert.equal(savedVideo.title, videoToSave.title);
+        assert.equal(savedVideo.description, videoToSave.description);
+        assert.equal(savedVideo.videoUrl, videoToSave.videoUrl);
+        //ensure response contains video details
         assert.include(response.text, videoToSave.title);
         assert.include(response.text, videoToSave.description);
+      });
+
+      it('renders the new video', async () => {
+        // Setup
+        const videoToSave = buildVideoObject();
+
+        // Exercise
+        const response = await authenticatedRequest
+          .post('/videos')
+          .type('form')
+          .send(videoToSave);
+
+        // Verify
+        const savedVideo = await Video.findOne({});
+        assert.equal(response.status, 302);
+        assert.equal(response.headers.location, `/videos/${savedVideo._id}`);
+      });
+
+      describe("with empty video title", () => {
+        it('does not save the video', async() => {
+          // Setup
+          const videoToSave = buildVideoObject({title: ''});
+
+          // Exercise
+          await authenticatedRequest
+            .post('/videos')
+            .type('form')
+            .send(videoToSave);
+
+          // Verify
+          const videos = await Video.find({});
+          assert.isEmpty(videos);
+        });
+
+        it('responds with a 400 status code', async () => {
+          // setup
+          const videoToSave = buildVideoObject({title: ''});
+          // Exercise
+          const response = await authenticatedRequest
+            .post('/videos')
+            .type('form')
+            .send(videoToSave);
+
+          //Verify
+          assert.equal(response.status, 400);
+        });
+
+        it('renders the video form', async () => {
+          // setup
+          const videoToSave = buildVideoObject({title: ''});
+
+          // Exercise
+          const response = await authenticatedRequest
+            .post('/videos')
+            .type('form')
+            .send(videoToSave);
+
+          // Verify
+          assert.exists(getElementFromHtml(response.text,'form input[name="title"]'),
+            'could not find input with name "title"');
+        });
+
+        it('displays an error message', async () => {
+          // setup
+          const videoToSave = buildVideoObject({title: ''});
+
+          // Exercise'
+          const response = await authenticatedRequest
+            .post('/videos')
+            .type('form')
+            .send(videoToSave);
+
+          // Verify
+          assert.include(response.text, 'Title is required');
+        });
+
+        it('preserves the other field values', async () => {
+          // Setup
+          const videoToSave = buildVideoObject({title: ''});
+
+          // Exercise
+          const response = await authenticatedRequest
+            .post('/videos')
+            .type('form')
+            .send(videoToSave);
+
+          //Verify
+          assert.include(response.text, 'Title is required');
+          assert.include(response.text, videoToSave.description);
+          assert.include(response.text, videoToSave.videoUrl);
+        });
+      });
+
+      describe('with empty URL', () => {
+        it('displays an error message', async () => {
+          // setup
+          const videoToSave = buildVideoObject({videoUrl: ''});
+
+          // Exercise'
+          const response = await authenticatedRequest
+            .post('/videos')
+            .type('form')
+            .send(videoToSave);
+
+          // Verify
+          assert.include(response.text, 'a URL is required');
+        });
+
+        it('preserves the other field values', async () => {
+          // Setup
+          const videoToSave = buildVideoObject({videoUrl: ''});
+
+          // Exercise
+          const response = await authenticatedRequest
+            .post('/videos')
+            .type('form')
+            .send(videoToSave);
+
+          //Verify
+          assert.include(response.text, 'a URL is required');
+          assert.include(response.text, videoToSave.title);
+          assert.include(response.text, videoToSave.description);
+        });
       });
     });
   });
