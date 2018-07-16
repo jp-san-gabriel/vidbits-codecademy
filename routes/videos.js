@@ -3,6 +3,14 @@ const Video = require('../models/video');
 const querystring = require('querystring');
 const {authenticate} = require('../authenticate');
 
+const requiresAuthentication = (req, res, next) => {
+  if(req.session.user) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
+
 router.get('/videos/create.html', (req, res) => {
   if(req.session.user) {
     res.render('videos/create');
