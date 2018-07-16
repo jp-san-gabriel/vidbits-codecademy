@@ -56,7 +56,7 @@ router.post('/videos/:id/deletions', async (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', {layout: false});
 });
 
 router.post('/login', (req, res) => {
@@ -65,7 +65,7 @@ router.post('/login', (req, res) => {
     req.session.user = user;
     res.redirect('/');
   } else {
-    res.render('login', {error: 'Invalid username or password'});
+    res.render('login', {layout: false, error: 'Invalid username or password'});
   }
 });
 
