@@ -11,19 +11,11 @@ const requiresAuthentication = (req, res, next) => {
   }
 }
 
-router.get('/videos/create.html', (req, res) => {
-  if(req.session.user) {
-    res.render('videos/create');
-  } else {
-    res.redirect('/login');
-  }
+router.get('/videos/create.html', requiresAuthentication, (req, res) => {
+  res.render('videos/create');
 });
 
-router.post('/videos', async (req, res) => {
-  if(!req.session.user) {
-    res.redirect('/login');
-    return;
-  }
+router.post('/videos', requiresAuthentication, async (req, res) => {
   const {title, description, videoUrl} = req.body;
   const video = new Video({title, description, videoUrl});
   video.validateSync();
