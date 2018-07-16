@@ -28,6 +28,18 @@ const seedVideoToDatabase = async (options = {}) => {
   return vid;
 };
 
+const login = () => {
+  const credentials = getValidCredentials();
+  browser.url('/login');
+  browser.setValue('form input[name="user"]', credentials.user);
+  browser.setValue('form input[name="password"]', credentials.password);
+  browser.click('#log-in');
+}
+
+const logout = () => {
+  browser.click('a[href="/logout"]');
+}
+
 const submitVideo = (video) => {
   browser.url('/videos/create.html');
   browser.setValue('#title-input', video.title || '');
@@ -51,5 +63,7 @@ module.exports = {
   buildVideoObject,
   submitVideo,
   seedVideoToDatabase,
-  getValidCredentials
+  getValidCredentials,
+  login,
+  logout
 };
