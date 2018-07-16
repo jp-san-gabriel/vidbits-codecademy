@@ -281,6 +281,25 @@ describe("Server path: /videos/:id/updates", () => {
   afterEach(disconnectDatabase);
 
   describe('POST', () => {
+
+    describe('when user is not logged in', () => {
+      it('redirects to login page', async () => {
+        // Setup
+        const video = await seedVideoToDatabase();
+
+        // Exercise
+        video.title = 'New video title';
+        const response = await request
+          .post(`/videos/${video._id}/updates`)
+          .type('form')
+          .send(video.toObject());
+
+        // Verify
+        assert.equal(response.status, 302);
+        assert.equal(response.headers.location, '/login');
+      });
+    });
+
     it('updates the record', async () => {
       // Setup
       const video = await seedVideoToDatabase();
