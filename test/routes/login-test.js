@@ -98,5 +98,22 @@ describe('Server path: /logout', () => {
       assert.include(response.text, 'Log in');
       assert.notInclude(response.text, 'Log out');
     });
+
+    it('redirects to index page', async () => {
+      // Setup
+      const credentials = getValidCredentials();
+      const request = supertest.agent(app);
+
+      // Exercise
+      await request.post('/login')
+        .type('form')
+        .send(credentials);
+
+      const response = await request.get('/logout');
+
+      // Verify
+      assert.equal(response.status, 302);
+      assert.equal(response.headers.location, '/videos');
+    });
   });
 });
