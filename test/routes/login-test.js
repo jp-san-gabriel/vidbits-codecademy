@@ -33,7 +33,7 @@ describe('Server path: /login', () => {
     it('logs in the user', async () => {
       // Setup
       const credentials = getValidCredentials();
-      
+
       // Exercise - send the username and password
       const response = await request
               .post('/login')
@@ -73,6 +73,30 @@ describe('Server path: /login', () => {
 
       // Verify
       assert.include(response.text, 'Invalid username or password');
+    });
+  });
+});
+
+describe('Server path: /logout', () => {
+  beforeEach(connectDatabase);
+  afterEach(disconnectDatabase);
+
+  describe('GET', () => {
+    it('logs out the user', async () => {
+      // Setup
+      const credentials = getValidCredentials();
+      const request = supertest.agent(app);
+
+      // Exercise - Log in then log out
+      await request.post('/login')
+        .type('form')
+        .send(credentials);
+
+      const response = await request.get('/logout');
+
+      // Verify
+      assert.include(response.text, 'Log in');
+      assert.notInclude(response.text, 'Log out');
     });
   });
 });
