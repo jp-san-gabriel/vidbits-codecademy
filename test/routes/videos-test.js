@@ -26,6 +26,19 @@ describe('Server path: /videos', () => {
   });
 
   describe('POST', () => {
+    describe('when user is not logged in', () => {
+      it('redirects to login page', async () => {
+        // Exercise
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(buildVideoObject());
+
+        // Verify
+        assert.equal(response.status, 302);
+        assert.equal(response.headers.location, '/login');
+      });
+    });
 
     it('saves a video', async () => {
       // Setup
