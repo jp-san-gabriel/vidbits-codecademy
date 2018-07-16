@@ -9,8 +9,10 @@
   {{/each}}
 </div>
 
+{{#if session.user}}
 <a href="/videos/create.html" class="add-video-button">
   <div>
     <p>Add Video</p>
   </div>
 </a>
+{{/if}}
