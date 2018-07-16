@@ -341,3 +341,16 @@ describe('Server path /videos/:id/deletions', () => {
     });
   });
 });
+
+describe('Server path: /videos/create.html', () => {
+  describe('GET', () => {
+    it('redirects to login page when user is not logged in', async () => {
+      // Exercise
+      const response = await request(app).get('/videos/create.html');
+
+      // Verify
+      assert.equal(response.status, 302);
+      assert.equal(response.headers.location, '/login');
+    });
+  });
+});
