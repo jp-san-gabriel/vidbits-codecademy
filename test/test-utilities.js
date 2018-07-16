@@ -1,5 +1,6 @@
 const {jsdom} = require('jsdom');
 const Video = require('../models/video');
+const { administrators } = require('../authenticate');
 
 function getElementFromHtml(html, selector) {
   const selectedElement= jsdom(html).querySelector(selector);
@@ -35,9 +36,20 @@ const submitVideo = (video) => {
   browser.click('#submit-button');
 };
 
+// helper function to generate a valid credential randomly
+const getValidCredentials = () => {
+  const usernames = Object.keys(administrators);
+  const user = usernames[Math.round(Math.random() * (usernames.length - 1))];
+  return {
+    user,
+    password: administrators[user]
+  };
+};
+
 module.exports = {
   getElementFromHtml,
   buildVideoObject,
   submitVideo,
-  seedVideoToDatabase
+  seedVideoToDatabase,
+  getValidCredentials
 };

@@ -1,7 +1,7 @@
 const {assert} = require('chai');
 const request = require('supertest');
 const app = require('../../app');
-const {getElementFromHtml} = require('../test-utilities');
+const {getElementFromHtml, getValidCredentials} = require('../test-utilities');
 const {connectDatabase, disconnectDatabase} = require('../database-utilities');
 
 describe('Server path: /login', () => {
@@ -27,29 +27,27 @@ describe('Server path: /login', () => {
   describe('POST', () => {
     it('logs in the user', async () => {
       // Setup
-      const user = 'admin';
-      const password = 'password';
+      const credentials = getValidCredentials();
       // Exercise - send the username and password
       const response = await request(app)
               .post('/login')
               .redirects()
               .type('form')
-              .send({user, password});
+              .send(credentials);
 
       // Verify - that the response contains the username
-      assert.include(response.text, user);
+      assert.include(response.text, credentials.user);
     });
 
     it('redirects to landing page', async () => {
       // Setup
-      const user = 'admin';
-      const password = 'password';
+      const credentials = getValidCredentials();
 
       // Exercise - send the username and password
       const response = await request(app)
         .post('/login')
         .type('form')
-        .send({user, password});
+        .send(credentials);
 
       // Verify
       assert.equal(response.status, 302);
