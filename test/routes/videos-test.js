@@ -300,90 +300,95 @@ describe("Server path: /videos/:id/updates", () => {
       });
     });
 
-    it('updates the record', async () => {
-      // Setup
-      const video = await seedVideoToDatabase();
+    describe('when user is logged in', () => {
+      beforeEach(authenticateRequest);
+      afterEach(logOffRequest);
 
-      // Exercise
-      video.title = 'New video title';
-      const response = await request
-        .post(`/videos/${video._id}/updates`)
-        .type('form')
-        .send(video.toObject());
-
-      // Verify
-      const updatedVideo = await Video.findById(video._id);
-      assert.deepEqual(video.toObject(), updatedVideo.toObject());
-    });
-
-    it('redirects to the show page upon updating', async () => {
-      // Setup
-      const video =await seedVideoToDatabase();
-
-      // Exercise
-      video.title = 'New video title';
-      const response = await request
-        .post(`/videos/${video._id}/updates`)
-        .type('form')
-        .send(video.toObject());
-
-      // Verify
-      assert.equal(response.status, 302);
-      assert.equal(response.headers.location, `/videos/${video._id}`);
-    });
-
-    describe('when input is invalid', () => {
-      it('does not save the record', async () => {
-        // Setup - save the video to database
+      it('updates the record', async () => {
+        // Setup
         const video = await seedVideoToDatabase();
 
-        // Exercise - set the video title to blank then submit the video
-        video.title = '';
+        // Exercise
+        video.title = 'New video title';
         const response = await request
           .post(`/videos/${video._id}/updates`)
           .type('form')
           .send(video.toObject());
 
-        // Verify - check that the title still is not blank to see that it was not updated
+        // Verify
         const updatedVideo = await Video.findById(video._id);
-        assert.notEqual(updatedVideo.title, video.title);
-
-        // Verify - check that it responds with a 400
-        assert.equal(response.status, 400);
+        assert.deepEqual(video.toObject(), updatedVideo.toObject());
       });
 
-      it('renders the edit form', async () => {
-        // Setup - save the video to database
-        const video = await seedVideoToDatabase();
+      it('redirects to the show page upon updating', async () => {
+        // Setup
+        const video =await seedVideoToDatabase();
 
-        // Exercise - set the video title to blank then submit the video
-        video.title = '';
+        // Exercise
+        video.title = 'New video title';
         const response = await request
           .post(`/videos/${video._id}/updates`)
           .type('form')
           .send(video.toObject());
 
-        // Verify that input fields contain the values of the submitted video
-        assert.equal(getElementFromHtml(response.text, 'form input[id="title-input"]').value, video.title);
-        assert.equal(getElementFromHtml(response.text, 'form textarea[id="description-input"]').value, video.description);
-        assert.equal(getElementFromHtml(response.text, 'form input[id="videoUrl-input"]').value, video.videoUrl);
+        // Verify
+        assert.equal(response.status, 302);
+        assert.equal(response.headers.location, `/videos/${video._id}`);
       });
 
-      it('displays validation error messages', async () => {
-        // Setup - save the video to database
-        const video = await seedVideoToDatabase();
+      describe('when input is invalid', () => {
+        it('does not save the record', async () => {
+          // Setup - save the video to database
+          const video = await seedVideoToDatabase();
 
-        // Exercise - set the video url and title to blank then submit the video
-        video.videoUrl = '';
-        video.title = '';
-        const response = await request
-          .post(`/videos/${video._id}/updates`)
-          .type('form')
-          .send(video.toObject());
+          // Exercise - set the video title to blank then submit the video
+          video.title = '';
+          const response = await request
+            .post(`/videos/${video._id}/updates`)
+            .type('form')
+            .send(video.toObject());
 
-        // Verify that the response text contains the validation error messages
-        assert.include(response.text, 'Title is required');
-        assert.include(response.text, 'a URL is required');
+          // Verify - check that the title still is not blank to see that it was not updated
+          const updatedVideo = await Video.findById(video._id);
+          assert.notEqual(updatedVideo.title, video.title);
+
+          // Verify - check that it responds with a 400
+          assert.equal(response.status, 400);
+        });
+
+        it('renders the edit form', async () => {
+          // Setup - save the video to database
+          const video = await seedVideoToDatabase();
+
+          // Exercise - set the video title to blank then submit the video
+          video.title = '';
+          const response = await request
+            .post(`/videos/${video._id}/updates`)
+            .type('form')
+            .send(video.toObject());
+
+          // Verify that input fields contain the values of the submitted video
+          assert.equal(getElementFromHtml(response.text, 'form input[id="title-input"]').value, video.title);
+          assert.equal(getElementFromHtml(response.text, 'form textarea[id="description-input"]').value, video.description);
+          assert.equal(getElementFromHtml(response.text, 'form input[id="videoUrl-input"]').value, video.videoUrl);
+        });
+
+        it('displays validation error messages', async () => {
+          // Setup - save the video to database
+          const video = await seedVideoToDatabase();
+
+          // Exercise - set the video url and title to blank then submit the video
+          video.videoUrl = '';
+          video.title = '';
+          const response = await request
+            .post(`/videos/${video._id}/updates`)
+            .type('form')
+            .send(video.toObject());
+
+          // Verify that the response text contains the validation error messages
+          assert.include(response.text, 'Title is required');
+          assert.include(response.text, 'a URL is required');
+        });
       });
     });
   });
