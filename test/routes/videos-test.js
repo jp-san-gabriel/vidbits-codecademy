@@ -416,29 +416,34 @@ describe('Server path /videos/:id/deletions', () => {
       });
     });
 
-    it('removes the record', async () => {
-      // Setup - save a video to database
-      const video = await seedVideoToDatabase();
+    describe('when user is logged in', () => {
+      beforeEach(authenticateRequest);
+      afterEach(logOffRequest);
 
-      // Exercise - send a post to '/videos/:id/deletions'
-      const response = await request
-        .post(`/videos/${video._id}/deletions`);
+      it('removes the record', async () => {
+        // Setup - save a video to database
+        const video = await seedVideoToDatabase();
 
-      // Verify - assert that database is empty
-      assert.isEmpty(await Video.find({}));
-    });
+        // Exercise - send a post to '/videos/:id/deletions'
+        const response = await request
+          .post(`/videos/${video._id}/deletions`);
 
-    it('redirects to landing page', async () => {
-      // Setup - save a video to database
-      const video = await seedVideoToDatabase();
+        // Verify - assert that database is empty
+        assert.isEmpty(await Video.find({}));
+      });
 
-      // Exercise - send a post to '/videos/:id/deletions'
-      const response = await request
-        .post(`/videos/${video._id}/deletions`);
+      it('redirects to landing page', async () => {
+        // Setup - save a video to database
+        const video = await seedVideoToDatabase();
 
-      // Verify
-      assert.equal(response.status, 302);
-      assert.equal(response.headers.location, '/');
+        // Exercise - send a post to '/videos/:id/deletions'
+        const response = await request
+          .post(`/videos/${video._id}/deletions`);
+
+        // Verify
+        assert.equal(response.status, 302);
+        assert.equal(response.headers.location, '/');
+      });
     });
   });
 });
