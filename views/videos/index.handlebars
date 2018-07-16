@@ -16,8 +16,10 @@
   </div>
 </a>
 
+{{#unless session.user}}
 <a href="/login" class="input-button">
   <div>
     <p>Log in</p>
   </div>
 </a>
+{{/unless}}
