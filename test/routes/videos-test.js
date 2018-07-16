@@ -240,6 +240,21 @@ describe("Server path: /videos/:id", () => {
       assert.include(response.text, video.title);
       assert.exists(getElementFromHtml(response.text, `iframe[src="${video.videoUrl}"]`));
     });
+
+    describe('when user is not logged in', () => {
+      it('does not render the \'update\' and \'delete\' buttons', async () => {
+        // Setup
+        const video = await seedVideoToDatabase();
+
+        // Exercise
+        const response = await request
+          .get(`/videos/${video._id}`);
+
+        // Verify
+        assert.notInclude(response.text, 'Update');
+        assert.notInclude(response.text, 'Delete');
+      });
+    });
   });
 });
 
