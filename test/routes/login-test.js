@@ -92,7 +92,9 @@ describe('Server path: /logout', () => {
         .type('form')
         .send(credentials);
 
-      const response = await request.get('/logout');
+      const response = await request
+        .get('/logout')
+        .redirects();
 
       // Verify
       assert.include(response.text, 'Log in');
