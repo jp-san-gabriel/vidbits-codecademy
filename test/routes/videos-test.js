@@ -246,18 +246,35 @@ describe("Server path: /videos/:id/edit", () => {
       });
     });
 
-    it("renders a form with values of existing video", async () => {
-      // Setup
-      const video = await seedVideoToDatabase();
+    describe('when user is logged in', () => {
+      let authenticatedRequest = null;
 
-      // Exercise
-      const response = await request(app)
-        .get(`/videos/${video._id}/edit`);
+      beforeEach(async () => {
+        const credentials = getValidCredentials();
+        authenticatedRequest = request.agent(app);
+        await authenticatedRequest
+          .post('/login')
+          .type('form')
+          .send(credentials);
+      });
 
-      // Verify
-      assert.equal(getElementFromHtml(response.text, 'form input[id="title-input"]').value, video.title);
-      assert.equal(getElementFromHtml(response.text, 'form textarea[id="description-input"]').value, video.description);
-      assert.equal(getElementFromHtml(response.text, 'form input[id="videoUrl-input"]').value, video.videoUrl);
+      afterEach(async () => {
+        await authenticatedRequest.get('/logout');
+      });
+
+      it("renders a form with values of existing video", async () => {
+        // Setup
+        const video = await seedVideoToDatabase();
+
+        // Exercise
+        const response = await authenticatedRequest
+          .get(`/videos/${video._id}/edit`);
+
+        // Verify
+        assert.equal(getElementFromHtml(response.text, 'form input[id="title-input"]').value, video.title);
+        assert.equal(getElementFromHtml(response.text, 'form textarea[id="description-input"]').value, video.description);
+        assert.equal(getElementFromHtml(response.text, 'form input[id="videoUrl-input"]').value, video.videoUrl);
+      });
     });
   });
 });
