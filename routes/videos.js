@@ -44,7 +44,7 @@ router.get('/videos/:id/edit', requiresAuthentication, async (req, res) => {
   res.render('videos/update', {video});
 });
 
-router.post('/videos/:id/updates', async (req, res) => {
+router.post('/videos/:id/updates', requiresAuthentication, async (req, res) => {
   const _id = req.params.id;
   const {title, description, videoUrl} = req.body;
 
