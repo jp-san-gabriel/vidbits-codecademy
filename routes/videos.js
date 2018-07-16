@@ -57,7 +57,7 @@ router.post('/videos/:id/updates', requiresAuthentication, async (req, res) => {
   });
 });
 
-router.post('/videos/:id/deletions', async (req, res) => {
+router.post('/videos/:id/deletions', requiresAuthentication, async (req, res) => {
   const _id = req.params.id;
   await Video.deleteOne({_id});
   res.redirect('/');
