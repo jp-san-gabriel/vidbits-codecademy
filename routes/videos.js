@@ -12,6 +12,10 @@ router.get('/videos/create.html', (req, res) => {
 });
 
 router.post('/videos', async (req, res) => {
+  if(!req.session.user) {
+    res.redirect('/login');
+    return;
+  }
   const {title, description, videoUrl} = req.body;
   const video = new Video({title, description, videoUrl});
   video.validateSync();
