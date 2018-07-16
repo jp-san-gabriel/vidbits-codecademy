@@ -32,6 +32,7 @@ describe('Server path: /login', () => {
       // Exercise - send the username and password
       const response = await request(app)
               .post('/login')
+              .redirects()
               .type('form')
               .send({user, password});
 
