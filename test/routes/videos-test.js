@@ -231,6 +231,21 @@ describe("Server path: /videos/:id/edit", () => {
   afterEach(disconnectDatabase);
 
   describe("GET", () => {
+
+    describe('when user is not logged in', () => {
+      it('redirects to login page', async () => {
+        // Setup
+        const video = await seedVideoToDatabase();
+
+        // Exercise
+        const response = await request(app)
+          .get(`/videos/${video._id}/edit`);
+
+        // Verify
+        assert.equal(response.headers.location, '/login');
+      });
+    });
+
     it("renders a form with values of existing video", async () => {
       // Setup
       const video = await seedVideoToDatabase();
