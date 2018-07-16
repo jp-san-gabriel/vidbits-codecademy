@@ -44,6 +44,16 @@ describe('Server path: /videos', () => {
       // Verify
       assert.include(response.text, existingVideo.title);
     });
+
+    describe('when user is not logged in', () => {
+      it('does not render the \'Save video\' button', async () => {
+        // Exercise
+        const response = await request.get('/videos');
+
+        // Verify
+        assert.notInclude(response.text, 'Add Video');
+      });
+    });
   });
 
   describe('POST', () => {
