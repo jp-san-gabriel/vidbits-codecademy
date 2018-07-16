@@ -4,7 +4,11 @@ const querystring = require('querystring');
 const {authenticate} = require('../authenticate');
 
 router.get('/videos/create.html', (req, res) => {
-  res.render('videos/create');
+  if(req.session.user) {
+    res.render('videos/create');
+  } else {
+    res.redirect('/login');
+  }
 });
 
 router.post('/videos', async (req, res) => {
