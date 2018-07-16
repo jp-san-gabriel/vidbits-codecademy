@@ -69,4 +69,10 @@ router.post('/login', (req, res) => {
   }
 });
 
+router.get('/logout', (req, res) => {
+  req.session.destroy();
+  delete res.locals.session;
+  res.render('videos/index');
+});
+
 module.exports = router;
