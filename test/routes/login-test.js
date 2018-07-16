@@ -78,20 +78,25 @@ describe('Server path: /login', () => {
 });
 
 describe('Server path: /logout', () => {
-  beforeEach(connectDatabase);
+  let request = null;
+
+  beforeEach(async () => {
+    await connectDatabase();
+    //log in
+    const credentials = getValidCredentials();
+    request = supertest.agent(app);
+    await request.post('/login')
+      .type('form')
+      .send(credentials);
+  });
   afterEach(disconnectDatabase);
 
   describe('GET', () => {
     it('logs out the user', async () => {
       // Setup
       const credentials = getValidCredentials();
-      const request = supertest.agent(app);
 
-      // Exercise - Log in then log out
-      await request.post('/login')
-        .type('form')
-        .send(credentials);
-
+      // Exercise
       const response = await request
         .get('/logout')
         .redirects();
@@ -104,13 +109,8 @@ describe('Server path: /logout', () => {
     it('redirects to index page', async () => {
       // Setup
       const credentials = getValidCredentials();
-      const request = supertest.agent(app);
 
       // Exercise
-      await request.post('/login')
-        .type('form')
-        .send(credentials);
-
       const response = await request.get('/logout');
 
       // Verify
