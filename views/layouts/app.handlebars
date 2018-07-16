@@ -14,7 +14,13 @@
         </a>
       </div>
     </div>
+    {{#if session.user}}
+      {{session.user}}, <a href="/logout">Log out</a>
+    {{else}}
+      <a href="/login">Log in</a>
+    {{/if}}
 
     {{{ body }}}
+
   </body>
 </html>
