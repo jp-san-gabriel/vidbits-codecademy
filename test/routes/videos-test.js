@@ -400,6 +400,22 @@ describe('Server path /videos/:id/deletions', () => {
   afterEach(disconnectDatabase);
 
   describe('POST', () => {
+
+    describe('when user is not logged in', () => {
+      it('redirects to login page', async () => {
+        // Setup - save a video to database
+        const video = await seedVideoToDatabase();
+
+        // Exercise - send a post to '/videos/:id/deletions'
+        const response = await request
+          .post(`/videos/${video._id}/deletions`);
+
+        // Verify
+        assert.equal(response.status, 302);
+        assert.equal(response.headers.location, '/login');
+      });
+    });
+
     it('removes the record', async () => {
       // Setup - save a video to database
       const video = await seedVideoToDatabase();
