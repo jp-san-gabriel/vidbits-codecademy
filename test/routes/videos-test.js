@@ -39,7 +39,7 @@ describe('Server path: /videos', () => {
       const existingVideo = await Video.create(buildVideoObject());
 
       //Exercise
-      const response = await request(app).get('/videos');
+      const response = await request.get('/videos');
 
       // Verify
       assert.include(response.text, existingVideo.title);
@@ -50,7 +50,7 @@ describe('Server path: /videos', () => {
     describe('when user is not logged in', () => {
       it('redirects to login page', async () => {
         // Exercise
-        const response = await request(app)
+        const response = await request
           .post('/videos')
           .type('form')
           .send(buildVideoObject());
@@ -62,8 +62,6 @@ describe('Server path: /videos', () => {
     });
 
     describe('when user is logged in', () => {
-
-      let authenticatedRequest = null;
 
       // Setup Phase - initialize an authenticated request
       beforeEach(async () => {
@@ -85,7 +83,7 @@ describe('Server path: /videos', () => {
         const videoToSave = buildVideoObject();
 
         // Exercise
-        const response = await authenticatedRequest
+        const response = await request
           .post('/videos')
           .redirects(1)
           .type('form')
@@ -106,7 +104,7 @@ describe('Server path: /videos', () => {
         const videoToSave = buildVideoObject();
 
         // Exercise
-        const response = await authenticatedRequest
+        const response = await request
           .post('/videos')
           .type('form')
           .send(videoToSave);
@@ -123,7 +121,7 @@ describe('Server path: /videos', () => {
           const videoToSave = buildVideoObject({title: ''});
 
           // Exercise
-          await authenticatedRequest
+          await request
             .post('/videos')
             .type('form')
             .send(videoToSave);
@@ -137,7 +135,7 @@ describe('Server path: /videos', () => {
           // setup
           const videoToSave = buildVideoObject({title: ''});
           // Exercise
-          const response = await authenticatedRequest
+          const response = await request
             .post('/videos')
             .type('form')
             .send(videoToSave);
@@ -151,7 +149,7 @@ describe('Server path: /videos', () => {
           const videoToSave = buildVideoObject({title: ''});
 
           // Exercise
-          const response = await authenticatedRequest
+          const response = await request
             .post('/videos')
             .type('form')
             .send(videoToSave);
@@ -166,7 +164,7 @@ describe('Server path: /videos', () => {
           const videoToSave = buildVideoObject({title: ''});
 
           // Exercise'
-          const response = await authenticatedRequest
+          const response = await request
             .post('/videos')
             .type('form')
             .send(videoToSave);
@@ -180,7 +178,7 @@ describe('Server path: /videos', () => {
           const videoToSave = buildVideoObject({title: ''});
 
           // Exercise
-          const response = await authenticatedRequest
+          const response = await request
             .post('/videos')
             .type('form')
             .send(videoToSave);
@@ -198,7 +196,7 @@ describe('Server path: /videos', () => {
           const videoToSave = buildVideoObject({videoUrl: ''});
 
           // Exercise'
-          const response = await authenticatedRequest
+          const response = await request
             .post('/videos')
             .type('form')
             .send(videoToSave);
@@ -212,7 +210,7 @@ describe('Server path: /videos', () => {
           const videoToSave = buildVideoObject({videoUrl: ''});
 
           // Exercise
-          const response = await authenticatedRequest
+          const response = await request
             .post('/videos')
             .type('form')
             .send(videoToSave);
@@ -237,7 +235,7 @@ describe("Server path: /videos/:id", () => {
       const video = await seedVideoToDatabase();
 
       // Exercise
-      const response = await request(app)
+      const response = await request
         .get(`/videos/${video._id}`);
 
       // Verify
@@ -259,7 +257,7 @@ describe("Server path: /videos/:id/edit", () => {
         const video = await seedVideoToDatabase();
 
         // Exercise
-        const response = await request(app)
+        const response = await request
           .get(`/videos/${video._id}/edit`);
 
         // Verify
@@ -268,7 +266,6 @@ describe("Server path: /videos/:id/edit", () => {
     });
 
     describe('when user is logged in', () => {
-      let authenticatedRequest = null;
 
       beforeEach(async () => {
         const credentials = getValidCredentials();
@@ -288,7 +285,7 @@ describe("Server path: /videos/:id/edit", () => {
         const video = await seedVideoToDatabase();
 
         // Exercise
-        const response = await authenticatedRequest
+        const response = await request
           .get(`/videos/${video._id}/edit`);
 
         // Verify
@@ -312,7 +309,7 @@ describe("Server path: /videos/:id/updates", () => {
 
       // Exercise
       video.title = 'New video title';
-      const response = await request(app)
+      const response = await request
         .post(`/videos/${video._id}/updates`)
         .type('form')
         .send(video.toObject());
@@ -328,7 +325,7 @@ describe("Server path: /videos/:id/updates", () => {
 
       // Exercise
       video.title = 'New video title';
-      const response = await request(app)
+      const response = await request
         .post(`/videos/${video._id}/updates`)
         .type('form')
         .send(video.toObject());
@@ -345,7 +342,7 @@ describe("Server path: /videos/:id/updates", () => {
 
         // Exercise - set the video title to blank then submit the video
         video.title = '';
-        const response = await request(app)
+        const response = await request
           .post(`/videos/${video._id}/updates`)
           .type('form')
           .send(video.toObject());
@@ -364,7 +361,7 @@ describe("Server path: /videos/:id/updates", () => {
 
         // Exercise - set the video title to blank then submit the video
         video.title = '';
-        const response = await request(app)
+        const response = await request
           .post(`/videos/${video._id}/updates`)
           .type('form')
           .send(video.toObject());
@@ -382,7 +379,7 @@ describe("Server path: /videos/:id/updates", () => {
         // Exercise - set the video url and title to blank then submit the video
         video.videoUrl = '';
         video.title = '';
-        const response = await request(app)
+        const response = await request
           .post(`/videos/${video._id}/updates`)
           .type('form')
           .send(video.toObject());
@@ -406,7 +403,7 @@ describe('Server path /videos/:id/deletions', () => {
       const video = await seedVideoToDatabase();
 
       // Exercise - send a post to '/videos/:id/deletions'
-      const response = await request(app)
+      const response = await request
         .post(`/videos/${video._id}/deletions`);
 
       // Verify - assert that database is empty
@@ -418,7 +415,7 @@ describe('Server path /videos/:id/deletions', () => {
       const video = await seedVideoToDatabase();
 
       // Exercise - send a post to '/videos/:id/deletions'
-      const response = await request(app)
+      const response = await request
         .post(`/videos/${video._id}/deletions`);
 
       // Verify
@@ -432,7 +429,7 @@ describe('Server path: /videos/create.html', () => {
   describe('GET', () => {
     it('redirects to login page when user is not logged in', async () => {
       // Exercise
-      const response = await request(app).get('/videos/create.html');
+      const response = await request.get('/videos/create.html');
 
       // Verify
       assert.equal(response.status, 302);
