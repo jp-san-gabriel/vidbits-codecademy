@@ -1,5 +1,5 @@
 const {assert} = require('chai');
-const request = require('supertest');
+const supertest = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
 const {connectDatabase, disconnectDatabase} = require('../database-utilities');
@@ -9,6 +9,9 @@ const {
   seedVideoToDatabase,
   getValidCredentials
 } = require('../test-utilities');
+
+// Make supertest preserve sessions
+const request = supertest.agent(app);
 
 describe('Server path: /videos', () => {
   // Setup Phase
