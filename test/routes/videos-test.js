@@ -3,7 +3,12 @@ const request = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
 const {connectDatabase, disconnectDatabase} = require('../database-utilities');
-const {getElementFromHtml, buildVideoObject, seedVideoToDatabase, getValidCredentials} = require('../test-utilities');
+const {
+  getElementFromHtml,
+  buildVideoObject,
+  seedVideoToDatabase,
+  getValidCredentials
+} = require('../test-utilities');
 
 describe('Server path: /videos', () => {
   // Setup Phase
