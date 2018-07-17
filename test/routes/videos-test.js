@@ -63,20 +63,8 @@ describe('Server path: /videos', () => {
 
     describe('when user is logged in', () => {
 
-      // Setup Phase - initialize an authenticated request
-      beforeEach(async () => {
-        authenticatedRequest = request.agent(app);
-        const credentials = getValidCredentials();
-        await authenticatedRequest
-          .post('/login')
-          .type('form')
-          .send(credentials);
-      });
-
-      // Teardown - logout
-      afterEach(async () => {
-        await authenticatedRequest.get('/logout');
-      });
+      beforeEach(authenticateRequest);
+      afterEach(logOffRequest);
 
       it('saves a video', async () => {
         // Setup
@@ -267,18 +255,8 @@ describe("Server path: /videos/:id/edit", () => {
 
     describe('when user is logged in', () => {
 
-      beforeEach(async () => {
-        const credentials = getValidCredentials();
-        authenticatedRequest = request.agent(app);
-        await authenticatedRequest
-          .post('/login')
-          .type('form')
-          .send(credentials);
-      });
-
-      afterEach(async () => {
-        await authenticatedRequest.get('/logout');
-      });
+      beforeEach(authenticateRequest);
+      afterEach(logOffRequest);
 
       it("renders a form with values of existing video", async () => {
         // Setup
