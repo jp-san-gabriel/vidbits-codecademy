@@ -13,6 +13,19 @@ const {
 // Make supertest preserve sessions
 const request = supertest.agent(app);
 
+// Helper function for authenticating the request
+const authenticateRequest = async () => {
+  await request
+    .post('/login')
+    .type('form')
+    .send(getValidCredentials());
+};
+
+// Helper function for logging off
+const logOffRequest = async () => {
+  await request.get('/logout');
+}
+
 describe('Server path: /videos', () => {
   // Setup Phase
   beforeEach(connectDatabase);
