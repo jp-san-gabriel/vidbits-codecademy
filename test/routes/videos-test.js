@@ -521,7 +521,8 @@ describe('Server path: /videos/:id/comments', () => {
       const response = await request
         .post(`/videos/${video._id}/comments`)
         .type('form')
-        .send(comment);
+        .send(comment)
+        .redirects();
 
       // Verify
       assert.include(response.text, comment.commenter);
