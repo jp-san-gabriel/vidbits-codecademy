@@ -61,7 +61,8 @@ router.post('/videos/:id/comments', async (req, res) => {
   const {commenter, comment} = req.body;
 
   if(!comment) {
-    res.sendStatus(400);
+    res.status(400).render('videos/show', {commentError: 'a comment is required'});
+    return;
   }
 
   const id = req.params.id;
