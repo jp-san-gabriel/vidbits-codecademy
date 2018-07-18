@@ -59,14 +59,18 @@ router.post('/videos/:id/updates', requiresAuthentication, async (req, res) => {
 
 router.post('/videos/:id/comments', async (req, res) => {
   const {commenter, comment} = req.body;
+  const id = req.params.id;
+  const video = await Video.findById(id);
 
   if(!comment) {
-    res.status(400).render('videos/show', {commentError: 'a comment is required'});
+    res.status(400).render('videos/show', {
+      video,
+      comment: {commenter},
+      commentError: 'a comment is required'
+    });
     return;
   }
 
-  const id = req.params.id;
-  const video = await Video.findById(id);
   if(!video.comments) {
     video.comments = [];
   }
