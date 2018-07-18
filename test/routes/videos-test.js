@@ -252,8 +252,8 @@ describe("Server path: /videos/:id", () => {
           .get(`/videos/${video._id}`);
 
         // Verify
-        assert.notInclude(response.text, 'Update');
-        assert.notInclude(response.text, 'Delete');
+        assert.notExists(getElementFromHtml(response.text, '#edit'));
+        assert.notExists(getElementFromHtml(response.text, '#delete'));
       });
     });
 
@@ -269,7 +269,7 @@ describe("Server path: /videos/:id", () => {
         const response = await request.get(`/videos/${video._id}`)
 
         // Verify that the response does not have the commenter's name field
-        assert.notExists(jsdom(response.text).querySelector('form input[name="commenter"]'));
+        assert.notExists(getElementFromHtml(response.text, 'form input[name="commenter"]'));
       });
     });
   });
