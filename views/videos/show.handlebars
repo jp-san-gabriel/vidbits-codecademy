@@ -21,6 +21,12 @@
       <p>{{video.description}}</p>
     </div>
 
+    {{#each video.comments as |comment|}}
+    <div>
+      <h3>{{comment.commenter}}</h3>
+      <p>{{comment.comment}}</p>
+    </div>
+    {{/each}}
     <form method="post" action="/videos/{{video._id}}/comments">
       <input type="text" name="commenter" placeholder="Your Name"/>
       <textarea name="comment" placeholder="Your comment"></textarea>
