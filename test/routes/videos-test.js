@@ -634,11 +634,7 @@ describe('Server path: /videos/:id/comments', () => {
 
       it('takes the username as the commenter\'s name', async () => {
         // Setup - login a random user
-        const credentials = getValidCredentials();
-        await request
-          .post('/login')
-          .type('form')
-          .send(credentials);
+        const username = await authenticateRequest();
 
         // add a video to db
         const video = await seedVideoToDatabase();
@@ -652,7 +648,7 @@ describe('Server path: /videos/:id/comments', () => {
           .redirects();
 
         // Verify
-        assert.include(getElementFromHtml(response.text, ".comment").textContent, credentials.user);
+        assert.include(getElementFromHtml(response.text, ".comment").textContent, username);
       });
     });
   });
