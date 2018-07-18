@@ -587,6 +587,24 @@ describe('Server path: /videos/:id/comments', () => {
         // Verify that the response contains the error message
         assert.include(response.text, 'a comment is required');
       });
+
+      it('preserves other field values', async () => {
+        // Setup
+        const video = await seedVideoToDatabase();
+        const comment = {
+          commenter: 'PAUL SAN GABRIEL',
+          comment: ''
+        };
+
+        // Exercise
+        const response = await request
+          .post(`/videos/${video._id}/comments`)
+          .type('form')
+          .send(comment);
+
+        // Verify that the response contains the commenter
+        assert.include(getElementFromHtml(response.text, 'form input[name="commenter"]').value, comment.commenter);
+      });
     });
   });
 });
