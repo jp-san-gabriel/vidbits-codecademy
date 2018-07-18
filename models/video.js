@@ -3,6 +3,9 @@ const {mongoose} = require('../database');
 const comment = mongoose.Schema({
   commenter: {
     type: String
+  },
+  comment: {
+    type: String
   }
 });
 const Video = mongoose.model(
@@ -20,7 +23,8 @@ const Video = mongoose.model(
       required: [true, 'a URL is required']
     },
     comments: [comment]
-  })
+  },
+  {usePushEach: true})
 );
 
 module.exports = Video;
