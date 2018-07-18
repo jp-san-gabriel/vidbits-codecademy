@@ -547,5 +547,28 @@ describe('Server path: /videos/:id/comments', () => {
       assert.equal(commentedVideo.comments[0].commenter, comment.commenter);
       assert.equal(commentedVideo.comments[0].comment, comment.comment);
     });
+
+    describe('with empty comment', async () => {
+      it('does not save the comment', async () => {
+        // Setup
+        const video = await seedVideoToDatabase();
+        const comment = {
+          commenter: 'PAUL SAN GABRIEL',
+          comment: ''
+        };
+
+        // Exercise
+        const response = await request
+          .post(`/videos/${video._id}/comments`)
+          .type('form')
+          .send(comment);
+
+        // Verify that comment length is zero
+        const commentedVideo = await Video.findById(video._id);
+        assert.equal(commentedVideo.comments.length, 0);
+        // Verify that it responds with a 400
+        assert.equal(response.status, 400);
+      });
+    });
   });
 });
