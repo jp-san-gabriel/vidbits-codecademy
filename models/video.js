@@ -5,7 +5,8 @@ const comment = mongoose.Schema({
     type: String
   },
   comment: {
-    type: String
+    type: String,
+    required: [true, 'a comment is required']
   }
 });
 const Video = mongoose.model(
