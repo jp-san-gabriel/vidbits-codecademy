@@ -491,23 +491,6 @@ describe('Server path: /videos/:id/comments', () => {
   afterEach(disconnectDatabase);
 
   describe('POST', () => {
-    it('responds with a 201 for new comments', async () => {
-      // Setup
-      const video = await seedVideoToDatabase();
-      const comment = {
-        commenter: 'PAUL SAN GABRIEL',
-        comment: 'This is a comment'
-      }
-
-      // Exercise
-      const response = await request
-        .post(`/videos/${video._id}/comments`)
-        .type('form')
-        .send(comment);
-
-      // Verify
-      assert.equal(response.status, 201);
-    });
 
     it('renders the comment on the video\'s show page', async () => {
       // Setup
