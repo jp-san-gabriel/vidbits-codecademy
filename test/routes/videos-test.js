@@ -16,10 +16,12 @@ const request = supertest.agent(app);
 
 // Helper function for authenticating the request
 const authenticateRequest = async () => {
+  const randomCredential = getValidCredentials();
   await request
     .post('/login')
     .type('form')
-    .send(getValidCredentials());
+    .send(randomCredential);
+  return randomCredential.user;
 };
 
 // Helper function for logging off
@@ -629,7 +631,7 @@ describe('Server path: /videos/:id/comments', () => {
 
     describe('when user is logged in', () => {
       afterEach(logOffRequest);
-      
+
       it('takes the username as the commenter\'s name', async () => {
         // Setup - login a random user
         const credentials = getValidCredentials();
