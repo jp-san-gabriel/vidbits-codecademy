@@ -626,5 +626,32 @@ describe('Server path: /videos/:id/comments', () => {
         assert.include(getElementFromHtml(response.text, 'form input[name="commenter"]').value, comment.commenter);
       });
     });
+
+    describe('when user is logged in', () => {
+      afterEach(logOffRequest);
+      
+      it('takes the username as the commenter\'s name', async () => {
+        // Setup - login a random user
+        const credentials = getValidCredentials();
+        await request
+          .post('/login')
+          .type('form')
+          .send(credentials);
+
+        // add a video to db
+        const video = await seedVideoToDatabase();
+        const comment = {comment: 'test comment'};
+
+        // Exercise
+        const response = await request
+          .post(`/videos/${video._id}/comments`)
+          .type('form')
+          .send(comment)
+          .redirects();
+
+        // Verify
+        assert.include(getElementFromHtml(response.text, ".comment").textContent, credentials.user);
+      });
+    });
   });
 });
