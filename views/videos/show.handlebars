@@ -29,7 +29,9 @@
     </div>
     {{/each}}
     <form method="post" action="/videos/{{video._id}}/comments#comment-form" class="comment-form" id="comment-form">
+      {{#unless session.user}}
       <input type="text" name="commenter" placeholder="Your Name" value="{{comment.commenter}}"/>
+      {{/unless}}
       {{#if comment.errors.comment}}
       <span>{{comment.errors.comment.message}}</span>
       {{/if}}
