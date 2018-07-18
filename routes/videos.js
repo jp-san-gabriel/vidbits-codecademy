@@ -61,22 +61,16 @@ router.post('/videos/:id/comments', async (req, res) => {
   const {commenter, comment} = req.body;
   const id = req.params.id;
   const video = await Video.findById(id);
+  const newComment = video.comments.create({commenter, comment});
+  newComment.validateSync();
 
-  if(!comment) {
-    res.status(400).render('videos/show', {
-      video,
-      comment: {commenter},
-      commentError: 'a comment is required'
-    });
-    return;
+  if(newComment.errors) {
+    res.status(400).render('videos/show', {video, comment:newComment});
+  } else {
+    video.comments.push(newComment);
+    await video.save();
+    res.status(201).render('videos/show', {video});
   }
-
-  if(!video.comments) {
-    video.comments = [];
-  }
-  video.comments.push({commenter, comment});
-  await video.save();
-  res.status(201).render('videos/show', {video});
 });
 
 router.post('/videos/:id/deletions', requiresAuthentication, async (req, res) => {
