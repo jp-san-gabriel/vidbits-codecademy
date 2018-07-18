@@ -22,15 +22,16 @@
     </div>
 
     {{#each video.comments as |comment|}}
-    <div>
-      <h3>{{comment.commenter}}</h3>
+    <div class="comment">
       <p>{{comment.comment}}</p>
+      <hr style="width:30%"/>
+      <small><b>{{comment.commenter}}</b></small>
     </div>
     {{/each}}
-    <form method="post" action="/videos/{{video._id}}/comments">
+    <form method="post" action="/videos/{{video._id}}/comments" class="comment-form">
       <input type="text" name="commenter" placeholder="Your Name"/>
       <textarea name="comment" placeholder="Your comment"></textarea>
-      <button type="submit" id="post-comment">Post</button>
+      <button type="submit" id="post-comment" class="input-button">Post</button>
     </form>
   </div>
 </div>

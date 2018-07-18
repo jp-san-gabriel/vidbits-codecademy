@@ -117,3 +117,36 @@ form textarea {
 .video-description {
   padding: 30px 10px;
 }
+
+.comment {
+  background-color: #ddd;
+  margin: 10px 15px;
+  padding: 10px 30px;
+  font-size: smaller;
+}
+
+.comment-form{
+  background-color: darker;
+  margin: 0 auto;
+  width: 80%;
+  padding-top: 30px;
+  padding-bottom: 10px;
+  font-size: smaller;
+}
+
+.comment-form input, .comment-form textarea {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  margin-top: 5px;
+  border: solid 1px #c9c9c9;
+  background-color: #eeeeee;
+  height: 20px;
+  font-family: Montserrat;
+  font-size: smaller;
+  padding: 5px;
+}
+
+.comment-form textarea {
+  height: 75px;
+}
