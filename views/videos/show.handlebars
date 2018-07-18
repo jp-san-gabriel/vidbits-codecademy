@@ -28,7 +28,7 @@
       <small><b>{{comment.commenter}}</b></small>
     </div>
     {{/each}}
-    <form method="post" action="/videos/{{video._id}}/comments" class="comment-form">
+    <form method="post" action="/videos/{{video._id}}/comments#comment-form" class="comment-form" id="comment-form">
       <input type="text" name="commenter" placeholder="Your Name" value="{{comment.commenter}}"/>
       {{#if comment.errors.comment}}
       <span>{{comment.errors.comment.message}}</span>
