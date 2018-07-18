@@ -569,6 +569,24 @@ describe('Server path: /videos/:id/comments', () => {
         // Verify that it responds with a 400
         assert.equal(response.status, 400);
       });
+
+      it('displays an error message', async () => {
+        // Setup
+        const video = await seedVideoToDatabase();
+        const comment = {
+          commenter: 'PAUL SAN GABRIEL',
+          comment: ''
+        };
+
+        // Exercise
+        const response = await request
+          .post(`/videos/${video._id}/comments`)
+          .type('form')
+          .send(comment);
+
+        // Verify that the response contains the error message
+        assert.include(response.text, 'a comment is required');
+      });
     });
   });
 });
