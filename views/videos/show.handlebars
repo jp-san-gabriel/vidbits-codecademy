@@ -30,7 +30,9 @@
     {{/each}}
     <form method="post" action="/videos/{{video._id}}/comments" class="comment-form">
       <input type="text" name="commenter" placeholder="Your Name" value="{{comment.commenter}}"/>
-      <span>{{commentError}}</span>
+      {{#if comment.errors.comment}}
+      <span>{{comment.errors.comment.message}}</span>
+      {{/if}}
       <textarea name="comment" placeholder="Your comment"></textarea>
       <button type="submit" id="post-comment" class="input-button">Post</button>
     </form>
