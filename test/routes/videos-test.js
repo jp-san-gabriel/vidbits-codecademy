@@ -548,6 +548,25 @@ describe('Server path: /videos/:id/comments', () => {
       assert.equal(commentedVideo.comments[0].comment, comment.comment);
     });
 
+    it('redirects to the video\'s show page', async () => {
+      // Setup
+      const video = await seedVideoToDatabase();
+      const comment = {
+        commenter: 'PAUL SAN GABRIEL',
+        comment: 'This is a test comment'
+      };
+
+      // Exercise
+      const response = await request
+        .post(`/videos/${video._id}/comments`)
+        .type('form')
+        .send(comment);
+
+      // Verify
+      assert.equal(response.status, 302);
+      assert.equal(response.headers.location,  `/videos/${video._id}`);
+    });
+
     describe('with empty comment', async () => {
       it('does not save the comment', async () => {
         // Setup
