@@ -527,5 +527,25 @@ describe('Server path: /videos/:id/comments', () => {
       assert.include(response.text, comment.commenter);
       assert.include(response.text, comment.comment);
     });
+
+    it('saves the comment', async() => {
+      // Setup
+      const video = await seedVideoToDatabase();
+      const comment = {
+        commenter: 'PAUL SAN GABRIEL',
+        comment: 'This is a test comment'
+      };
+
+      // Exercise
+      const response = await request
+        .post(`/videos/${video._id}/comments`)
+        .type('form')
+        .send(comment);
+
+      // Verify
+      const commentedVideo = await Video.findById(video._id);
+      assert.equal(commentedVideo.comments[0].commenter, comment.commenter);
+      assert.equal(commentedVideo.comments[0].comment, comment.comment);
+    });
   });
 });
