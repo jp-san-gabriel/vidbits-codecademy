@@ -108,5 +108,15 @@ describe('Model: Video', () => {
       // Verify
       assert.equal(video.comments[0].comment, comment.toString());
     });
+
+    it('is required', () => {
+      // Exercise
+      const video = new Video({});
+      const comment = video.comments.create({commenter: 3});
+      comment.validateSync();
+
+      // Verify
+      assert.equal(comment.errors.comment.message, 'a comment is required');
+    });
   })
 });
