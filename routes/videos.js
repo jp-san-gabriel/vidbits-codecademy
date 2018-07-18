@@ -65,6 +65,7 @@ router.post('/videos/:id/comments', async (req, res) => {
     video.comments = [];
   }
   video.comments.push({commenter, comment});
+  await video.save();
   res.status(201).render('videos/show', {video});
 });
 
