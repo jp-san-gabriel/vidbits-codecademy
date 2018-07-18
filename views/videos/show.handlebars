@@ -20,5 +20,11 @@
     <div class="video-description">
       <p>{{video.description}}</p>
     </div>
+
+    <form method="post" action="/videos/{{video._id}}/comments">
+      <input type="text" name="commenter" placeholder="Your Name"/>
+      <textarea name="comment" placeholder="Your comment"></textarea>
+      <button type="submit" id="post-comment">Post</button>
+    </form>
   </div>
 </div>
