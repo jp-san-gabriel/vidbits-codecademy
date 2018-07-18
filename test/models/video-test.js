@@ -94,4 +94,19 @@ describe('Model: Video', () => {
       assert.equal(video.comments[0].commenter, commenter.toString());
     });
   })
+
+  describe('#comments.comment', () => {
+    it('is a String', () => {
+      // Exercise
+      const comment = 3;
+      const video = new Video({
+        title: 1,
+        videoUrl: 2,
+        comments:[{comment}]
+      });
+
+      // Verify
+      assert.equal(video.comments[0].comment, comment.toString());
+    });
+  })
 });
