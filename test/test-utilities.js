@@ -3,12 +3,7 @@ const Video = require('../models/video');
 const { administrators } = require('../authenticate');
 
 function getElementFromHtml(html, selector) {
-  const selectedElement= jsdom(html).querySelector(selector);
-  if(selectedElement !== null) {
-    return selectedElement;
-  } else {
-    throw new Error(`No element with selector "${selector}" found in HTML string`);
-  }
+  return jsdom(html).querySelector(selector);
 };
 
 // Builds a Video object with random values to be used as test data
