@@ -1,4 +1,5 @@
 const {assert} = require('chai');
+const {jsdom} = require('jsdom');
 const supertest = require('supertest');
 const app = require('../../app');
 const Video = require('../../models/video');
@@ -253,6 +254,22 @@ describe("Server path: /videos/:id", () => {
         // Verify
         assert.notInclude(response.text, 'Update');
         assert.notInclude(response.text, 'Delete');
+      });
+    });
+
+    describe('when user is logged in', () => {
+      beforeEach(authenticateRequest);
+      afterEach(logOffRequest);
+
+      it('does not render the commenter\'s name field', async () => {
+        // Setup
+        const video = await seedVideoToDatabase();
+
+        // Exercise
+        const response = await request.get(`/videos/${video._id}`)
+
+        // Verify that the response does not have the commenter's name field
+        assert.notExists(jsdom(response.text).querySelector('form input[name="commenter"]'));
       });
     });
   });
