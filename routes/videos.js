@@ -57,8 +57,15 @@ router.post('/videos/:id/updates', requiresAuthentication, async (req, res) => {
   });
 });
 
-router.post('/videos/:id/comments', (req, res) => {
-  res.sendStatus(201);
+router.post('/videos/:id/comments', async (req, res) => {
+  const {commenter, comment} = req.body;
+  const id = req.params.id;
+  const video = await Video.findById(id);
+  if(!video.comments) {
+    video.comments = [];
+  }
+  video.comments.push({commenter, comment});
+  res.status(201).render('videos/show', {video});
 });
 
 router.post('/videos/:id/deletions', requiresAuthentication, async (req, res) => {
