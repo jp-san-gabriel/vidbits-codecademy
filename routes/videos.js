@@ -61,7 +61,10 @@ router.post('/videos/:id/comments', async (req, res) => {
   const {commenter, comment} = req.body;
   const id = req.params.id;
   const video = await Video.findById(id);
-  const newComment = video.comments.create({commenter, comment});
+  const newComment = video.comments.create({
+    commenter: req.session.user || commenter,
+    comment
+  });
   newComment.validateSync();
 
   if(newComment.errors) {
