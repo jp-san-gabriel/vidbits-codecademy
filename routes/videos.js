@@ -69,7 +69,7 @@ router.post('/videos/:id/comments', async (req, res) => {
   } else {
     video.comments.push(newComment);
     await video.save();
-    res.status(201).render('videos/show', {video});
+    res.redirect(`/videos/${video._id}`);
   }
 });
 
