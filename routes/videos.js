@@ -57,6 +57,10 @@ router.post('/videos/:id/updates', requiresAuthentication, async (req, res) => {
   });
 });
 
+router.post('/videos/:id/comments', (req, res) => {
+  res.sendStatus(201);
+});
+
 router.post('/videos/:id/deletions', requiresAuthentication, async (req, res) => {
   const _id = req.params.id;
   await Video.deleteOne({_id});
