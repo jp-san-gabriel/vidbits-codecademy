@@ -66,4 +66,17 @@ describe('Model: Video', () => {
       assert.equal(video.errors.videoUrl.message, 'a URL is required');
     });
   });
+
+  describe('#comments', () => {
+    it('is an Array', () => {
+      // Exercise
+      const video = new Video({
+        title: 1,
+        videoUrl: 2
+      });
+
+      // Verify
+      assert.equal(video.comments.length, 0);
+    });
+  });
 });
