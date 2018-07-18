@@ -1,5 +1,10 @@
 const {mongoose} = require('../database');
 
+const comment = mongoose.Schema({
+  commenter: {
+    type: String
+  }
+});
 const Video = mongoose.model(
   'Video',
   mongoose.Schema({
@@ -14,7 +19,7 @@ const Video = mongoose.model(
       type: String,
       required: [true, 'a URL is required']
     },
-    comments: []
+    comments: [comment]
   })
 );
 
