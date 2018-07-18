@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "seed-db": "node ./bin/seed-database",
+    "drop-db": "node ./bin/drop-database",
     "start": "node ./bin/www",
     "test": "bin/mocha-test && bin/wdio-test",
     "test:mocha": "bin/mocha-test || exit 0",
